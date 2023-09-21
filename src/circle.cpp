@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_timer.h>
 #include <circle.hpp>
 #include <cstdio>
 #include <iostream>
@@ -17,7 +18,6 @@ void DrawCircle(SDL_Renderer * renderer, int centreX, int centreY, int radius)
 
    while (x >= y)
    {
-      //  Each of the following renders an octant of the circle
       SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
       SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
       SDL_RenderDrawPoint(renderer, centreX - x, centreY - y);
@@ -26,7 +26,7 @@ void DrawCircle(SDL_Renderer * renderer, int centreX, int centreY, int radius)
       SDL_RenderDrawPoint(renderer, centreX + y, centreY + x);
       SDL_RenderDrawPoint(renderer, centreX - y, centreY - x);
       SDL_RenderDrawPoint(renderer, centreX - y, centreY + x);
-
+      
       if (error <= 0)
       {
          ++y;

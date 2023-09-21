@@ -1,11 +1,15 @@
 #include <SDL2/SDL.h> 
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
+#include <cstdio>
 #include <iostream>
+#include <ostream>
 #include <setup.hpp>
 #include <grid.hpp>
 #include <circle.hpp>
+
 using namespace std;
 
 int main(void){
@@ -80,6 +84,7 @@ int main(void){
         {80,20},
         {100,20}
     };
+    SDL_MouseMotionEvent mouse;
     while( quit == false ){
         SDL_RenderClear(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 255, 0,255);
@@ -97,7 +102,7 @@ int main(void){
 
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
-        DrawCircle(renderizador, 800, 300, 400);
+        DrawCircle(renderizador, 300, 100, 40);
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
         
         SDL_RenderPresent(renderizador);
@@ -131,6 +136,10 @@ int main(void){
                     case SDLK_f:
                         celda5.move(BOTTOM_RIGHT, 0, 1);
                         break;
+                }
+            }else if (e.type == SDL_MOUSEMOTION) {
+                if (e.motion.y>=20 && e.motion.y<=70){cout<<"recthit"<<endl;}else {
+                    cout<<"nohit"<<endl;
                 }
             }
         } 

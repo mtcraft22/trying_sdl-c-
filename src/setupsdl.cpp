@@ -3,8 +3,8 @@
 #include <iostream>
 #include <setup.hpp>
 
-#define WITH 1600
-#define HEIGHT 1200
+#define WITH 800
+#define HEIGHT 600
 
 using namespace std;
 
