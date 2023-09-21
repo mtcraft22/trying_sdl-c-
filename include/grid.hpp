@@ -2,10 +2,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
-#include  <iostream>
+#include <iostream>
 #include <optional>
-#include  <string>
-#include  <map>
+#include <string>
+#include <map>
 #include <vector>
 #ifndef grid
 #define grid
@@ -14,9 +14,9 @@ enum cell_vertex{TOP_LEFT=1,TOP_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT};
 
 class terreno{
     public:
-        SDL_Vertex poligono1 [3] ;
-        SDL_Vertex poligono2 [3]  ;
-        SDL_Point celda [6]  ;
+        SDL_Vertex poligono1 [3];
+        SDL_Vertex poligono2 [3];
+        SDL_Point celda [6];
         int indice[3];
         terreno *top;
         terreno *bottom;

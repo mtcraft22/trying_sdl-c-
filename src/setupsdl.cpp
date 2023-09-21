@@ -1,14 +1,13 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
-
 #include <setup.hpp>
 
-#define WITH 800
-#define HEIGHT 600
-
+#define WITH 1600
+#define HEIGHT 1200
 
 using namespace std;
+
 bool init_sdl(){
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {

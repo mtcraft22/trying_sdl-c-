@@ -1,9 +1,11 @@
-
 #include <SDL2/SDL.h> 
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
 #include <iostream>
 #include <setup.hpp>
 #include <grid.hpp>
+#include <circle.hpp>
 using namespace std;
 
 int main(void){
@@ -18,15 +20,22 @@ int main(void){
         return -1;
     }
     SDL_Renderer* renderizador = SDL_CreateRenderer(window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    SDL_Renderer* texrenderer =  SDL_CreateRenderer(window, 2, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    //SDL_Renderer* textura =  SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    SDL_Surface * texture_surface = IMG_Load("./resources/bueno.png");
+    
+    SDL_Surface* texture_surface = IMG_Load("./resources/bueno.png");
     SDL_Texture* tex = SDL_CreateTextureFromSurface(renderizador, texture_surface);
-    if (!tex){cout<<"java.sdl.texture.load.creatre"<<SDL_GetError()<<std::endl;}
+
+    //cargamos al personaje pricipal
+
+    SDL_Surface* pepe = IMG_Load("./resources/pepe.png");
+    SDL_Texture* pepe_text = SDL_CreateTextureFromSurface(renderizador, pepe);
+
+    if (!tex){cout<<"sdl.texture.load.create"<<SDL_GetError()<<std::endl;}
     
     SDL_Color col{ 0xff,0xff,0xff,0xff };
 
-    SDL_Point root ={100,100};
+    SDL_Point root;
+
+    root ={100,100};
     terreno celda = terreno(60,root,col);
     root ={161,100};
     terreno celda2 = terreno(60,root,col);
@@ -53,6 +62,24 @@ int main(void){
     celda5.set_ayacent(TOP, &celda2);
     celda5.set_ayacent(BOTTOM, &celda8);
     celda5.set_ayacent(LEFT, &celda4);
+    SDL_Vertex pepe_forma[3]={
+        {200,200,col,0.0f,0.0f},
+        {250,200,col,1.0f,0.0f},
+        {200,250,col,0.0f,1.0f}
+
+        };
+    SDL_Vertex pepe_forma2[3]={
+        {200,250,col,0.0f,1.0f},
+        {250,250,col,1.0f,1.0f},
+        {250,200,col,1.0f,0.0f}
+
+        };
+    int indices_pepe[4]= {0,1,2};
+    const SDL_Rect rec={20,20,50,50};
+    const SDL_Point cir[2]={
+        {80,20},
+        {100,20}
+    };
     while( quit == false ){
         SDL_RenderClear(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 255, 0,255);
@@ -65,8 +92,14 @@ int main(void){
         celda7.draw(renderizador, tex);
         celda8.draw(renderizador, tex);
         celda9.draw(renderizador, tex);
-    
+
+        SDL_RenderDrawRect(renderizador, &rec);
+
+        SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
+        SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
+        DrawCircle(renderizador, 800, 300, 400);
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
+        
         SDL_RenderPresent(renderizador);
         
         while(SDL_PollEvent( &e ))
@@ -104,7 +137,9 @@ int main(void){
     }
     
     SDL_DestroyTexture(tex);
-    SDL_DestroyRenderer(texrenderer);
+    SDL_DestroyTexture(pepe_text);
+    SDL_FreeSurface(pepe);
+    //SDL_DestroyRenderer(texrenderer);
     SDL_FreeSurface(texture_surface);
     SDL_DestroyRenderer(renderizador);
     SDL_DestroyWindow( window );
