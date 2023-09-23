@@ -29,6 +29,7 @@ void DrawCircle(SDL_Renderer * renderer, int centreX, int centreY, int radius)
       
       if (error <= 0)
       {
+         
          ++y;
          error += ty;
          ty += 2;

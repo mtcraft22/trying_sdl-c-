@@ -1,15 +1,14 @@
 #include <SDL2/SDL.h> 
-#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
+
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
-#include <cstdio>
+#include <cmath>
 #include <iostream>
-#include <ostream>
 #include <setup.hpp>
 #include <grid.hpp>
 #include <circle.hpp>
-
+#include <math.h>
 using namespace std;
 
 int main(void){
@@ -102,11 +101,11 @@ int main(void){
 
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
-        DrawCircle(renderizador, 300, 100, 40);
+        DrawCircle(renderizador, 350, 100, 40);
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
         
         SDL_RenderPresent(renderizador);
-        
+
         while(SDL_PollEvent( &e ))
         { 
             if( e.type == SDL_QUIT ) {quit = true;}
@@ -137,11 +136,19 @@ int main(void){
                         celda5.move(BOTTOM_RIGHT, 0, 1);
                         break;
                 }
-            }else if (e.type == SDL_MOUSEMOTION) {
-                if (e.motion.y>=20 && e.motion.y<=70){cout<<"recthit"<<endl;}else {
-                    cout<<"nohit"<<endl;
-                }
             }
+            if (e.motion.y>=20 && e.motion.y<=70&&e.motion.x>=20 && e.motion.x<=70){
+                cout<<"recthit"<<endl;
+            }
+            //350, 100, 40
+        
+            else if(sqrt(((350-e.motion.x)*(350-e.motion.x))+((100-e.motion.y)*(100-e.motion.y)))<=40){
+                cout << "hitcirc"<<endl;
+            }
+            else {
+                cout<<"nohit"<<endl;
+            }
+            
         } 
     }
     
