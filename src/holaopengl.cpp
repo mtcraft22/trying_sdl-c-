@@ -1,14 +1,13 @@
+#include <iostream>
+#include <math.h>
+
 #include <SDL2/SDL.h> 
 #include <SDL2/SDL_image.h>
 
-#include <SDL2/SDL_rect.h>
-#include <SDL2/SDL_render.h>
-#include <cmath>
-#include <iostream>
 #include <setup.hpp>
 #include <grid.hpp>
 #include <circle.hpp>
-#include <math.h>
+
 using namespace std;
 
 int main(void){
@@ -32,7 +31,7 @@ int main(void){
     SDL_Surface* pepe = IMG_Load("./resources/pepe.png");
     SDL_Texture* pepe_text = SDL_CreateTextureFromSurface(renderizador, pepe);
 
-    if (!tex){cout<<"sdl.texture.load.create"<<SDL_GetError()<<std::endl;}
+    if (!tex){cout<<"sdl_texture_load"<<SDL_GetError()<<std::endl;}
     
     SDL_Color col{ 0xff,0xff,0xff,0xff };
 
@@ -61,6 +60,8 @@ int main(void){
 
     SDL_Event e;    
     bool quit = false;
+    celda2.set_ayacent(RIGHT, &celda3);
+    celda2.set_ayacent(LEFT, &celda);
     celda5.set_ayacent(RIGHT, &celda6);
     celda5.set_ayacent(TOP, &celda2);
     celda5.set_ayacent(BOTTOM, &celda8);
@@ -79,10 +80,7 @@ int main(void){
         };
     int indices_pepe[4]= {0,1,2};
     const SDL_Rect rec={20,20,50,50};
-    const SDL_Point cir[2]={
-        {80,20},
-        {100,20}
-    };
+
     SDL_MouseMotionEvent mouse;
     while( quit == false ){
         SDL_RenderClear(renderizador);
@@ -101,7 +99,7 @@ int main(void){
 
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
-        DrawCircle(renderizador, 350, 100, 40);
+        DrawCircle(renderizador, 350, 100, 80);
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
         
         SDL_RenderPresent(renderizador);
@@ -140,9 +138,8 @@ int main(void){
             if (e.motion.y>=20 && e.motion.y<=70&&e.motion.x>=20 && e.motion.x<=70){
                 cout<<"recthit"<<endl;
             }
-            //350, 100, 40
-        
-            else if(sqrt(((350-e.motion.x)*(350-e.motion.x))+((100-e.motion.y)*(100-e.motion.y)))<=40){
+            // sqrt((circle.center.x-entity.x*circle.center.x-entity.x)*(circle.center.y-entity.y*circle.center.y-entity.y))<=circle.radius
+            else if(sqrt(((350-e.motion.x)*(350-e.motion.x))+((100-e.motion.y)*(100-e.motion.y)))<=80){
                 cout << "hitcirc"<<endl;
             }
             else {
