@@ -2,7 +2,7 @@ sources = $(shell ls  ./src/*.cpp)
 objects = $(shell ls  ./*.o)
 
 lib = -lSDL2 -lSDL2_image
-Include = -I../include 
+Include = -I../include -I/usr/include/SDL2
 CPPFLAGS= $(include) $(lib)
 COMPILER = g++
 all:setupsdl.o grid.o holaopengl.o circle.o
