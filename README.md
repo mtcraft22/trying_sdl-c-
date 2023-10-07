@@ -1,1 +1,1 @@
-# trying_sdl-c-
+# I'm learning sdl with c++
