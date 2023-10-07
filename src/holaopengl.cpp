@@ -1,6 +1,5 @@
 #include <iostream>
 #include <math.h>
-
 #include <SDL2/SDL.h> 
 #include <SDL2/SDL_image.h>
 
@@ -66,6 +65,8 @@ int main(void){
     celda5.set_ayacent(TOP, &celda2);
     celda5.set_ayacent(BOTTOM, &celda8);
     celda5.set_ayacent(LEFT, &celda4);
+    celda8.set_ayacent(LEFT, &celda7);
+    celda8.set_ayacent(RIGHT, &celda9);
     SDL_Vertex pepe_forma[3]={
         {200,200,col,0.0f,0.0f},
         {250,200,col,1.0f,0.0f},
@@ -82,6 +83,7 @@ int main(void){
     const SDL_Rect rec={20,20,50,50};
 
     SDL_MouseMotionEvent mouse;
+    Circle circulo = Circle(350,100,80);
     while( quit == false ){
         SDL_RenderClear(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 255, 0,255);
@@ -99,7 +101,7 @@ int main(void){
 
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
-        DrawCircle(renderizador, 350, 100, 80);
+        circulo.DrawCircle(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
         
         SDL_RenderPresent(renderizador);

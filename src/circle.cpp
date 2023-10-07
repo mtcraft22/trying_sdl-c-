@@ -2,15 +2,21 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
 #include <circle.hpp>
-#include <cstdio>
+
 #include <iostream>
 #include <ostream>
 
-void DrawCircle(SDL_Renderer * renderer, int centreX, int centreY, int radius)
-{
-   const int32_t diameter = (radius * 2);
 
-   int32_t x = (radius - 1);
+Circle::Circle(int x,int y,int r){
+   this->x=x;
+   this->y=y;
+   this->r=r;
+}
+void Circle::DrawCircle(SDL_Renderer *renderer)
+{
+   const int32_t diameter = (this->r * 2);
+
+   int32_t x = (this->r - 1);
    int32_t y = 0;
    int32_t tx = 1;
    int32_t ty = 1;
@@ -18,18 +24,17 @@ void DrawCircle(SDL_Renderer * renderer, int centreX, int centreY, int radius)
 
    while (x >= y)
    {
-      SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
-      SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
-      SDL_RenderDrawPoint(renderer, centreX - x, centreY - y);
-      SDL_RenderDrawPoint(renderer, centreX - x, centreY + y);
-      SDL_RenderDrawPoint(renderer, centreX + y, centreY - x);
-      SDL_RenderDrawPoint(renderer, centreX + y, centreY + x);
-      SDL_RenderDrawPoint(renderer, centreX - y, centreY - x);
-      SDL_RenderDrawPoint(renderer, centreX - y, centreY + x);
+      SDL_RenderDrawPoint(renderer, this->x + x, this->y - y);
+      SDL_RenderDrawPoint(renderer, this->x + x, this->y + y);
+      SDL_RenderDrawPoint(renderer, this->x - x, this->y - y);
+      SDL_RenderDrawPoint(renderer, this->x - x, this->y + y);
+      SDL_RenderDrawPoint(renderer, this->x + y, this->y - x);
+      SDL_RenderDrawPoint(renderer, this->x + y, this->y + x);
+      SDL_RenderDrawPoint(renderer, this->x - y, this->y - x);
+      SDL_RenderDrawPoint(renderer, this->x - y, this->y + x);
       
       if (error <= 0)
       {
-         
          ++y;
          error += ty;
          ty += 2;
