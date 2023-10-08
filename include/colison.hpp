@@ -2,22 +2,29 @@
 #include <SDL.h>
 #include <iostream>
 #include <string>
-#include <tuple>
 
 using namespace std;
 
-template<typename T> 
 class Colison{
     public:
-        Colison(string tag, T shape){
+        Colison(string tag){
             this->tag=tag;
-            this->shape=shape;
         };
-        string get_tag();
-        T shape;
+        string get_tag(){
+            return this->tag;
+        };
         void oncolision(Colison colisioned,void(*colision_callback)(void));
-        void oncolisionfromtag(string tag,void(*colision_callback)(void));
-        void draw(SDL_Renderer* rendeizer);
-    private:
+        void oncolision(string tag,void(*colision_callback)(void));
+        void debug_colision(SDL_Renderer* rendeizer);
+    protected:
         string tag;      
+};
+class Rect_colison:Colison{
+    public:
+        Rect_colison(string tag, SDL_Rect* box):Colison(tag){
+            this->box=box;
+        }
+    private:
+        SDL_Rect * box;
+        
 };

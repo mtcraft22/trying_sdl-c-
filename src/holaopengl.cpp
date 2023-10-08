@@ -84,6 +84,7 @@ int main(void){
 
     SDL_MouseMotionEvent mouse;
     Circle circulo = Circle(350,100,80);
+    Circle mouse_box = Circle(0,0,25);
     while( quit == false ){
         SDL_RenderClear(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 255, 0,255);
@@ -96,12 +97,13 @@ int main(void){
         celda7.draw(renderizador, tex);
         celda8.draw(renderizador, tex);
         celda9.draw(renderizador, tex);
-
+       
         SDL_RenderDrawRect(renderizador, &rec);
 
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
         circulo.DrawCircle(renderizador);
+        mouse_box.DrawCircle(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
         
         SDL_RenderPresent(renderizador);
@@ -137,17 +139,21 @@ int main(void){
                         break;
                 }
             }
+            
             if (e.motion.y>=20 && e.motion.y<=70&&e.motion.x>=20 && e.motion.x<=70){
                 cout<<"recthit"<<endl;
             }
-            // sqrt((circle.center.x-entity.x*circle.center.x-entity.x)*(circle.center.y-entity.y*circle.center.y-entity.y))<=circle.radius
+            /*point in circle colison: 
+            sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius*/
+            
             else if(sqrt(((350-e.motion.x)*(350-e.motion.x))+((100-e.motion.y)*(100-e.motion.y)))<=80){
                 cout << "hitcirc"<<endl;
             }
             else {
                 cout<<"nohit"<<endl;
             }
-            
+            mouse_box.setx(e.motion.x);
+            mouse_box.sety(e.motion.y);
         } 
     }
     
