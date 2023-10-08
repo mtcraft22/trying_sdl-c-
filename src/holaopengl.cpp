@@ -29,7 +29,9 @@ int main(void){
 
     SDL_Surface* pepe = IMG_Load("./resources/pepe.png");
     SDL_Texture* pepe_text = SDL_CreateTextureFromSurface(renderizador, pepe);
-
+    //caragamos la textura de la segunda capa
+    SDL_Surface* segunda_capa = IMG_Load("./resources/ladrillo.png");
+    SDL_Texture* capa2_text = SDL_CreateTextureFromSurface(renderizador, segunda_capa);
     if (!tex){cout<<"sdl_texture_load"<<SDL_GetError()<<std::endl;}
     
     SDL_Color col{ 0xff,0xff,0xff,0xff };
@@ -56,6 +58,29 @@ int main(void){
     terreno celda8 = terreno(60,root,col);
     root ={161,162};
     terreno celda9 = terreno(60,root,col);
+
+    
+    root ={110,110};
+    terreno celda10 = terreno(60,root,col);
+    root ={171,110};
+    terreno celda12 = terreno(60,root,col);
+    root ={232,110};
+    terreno celda13 = terreno(60,root,col);
+
+    root ={80,141};
+    terreno celda14 = terreno(60,root,col);
+    root ={141,141};
+    terreno celda15 = terreno(60,root,col);
+    root ={202,141};
+    terreno celda16 = terreno(60,root,col);
+
+    root ={50,172};    
+    terreno celda17 = terreno(60,root,col);
+    root ={111,172};
+    terreno celda18 = terreno(60,root,col);
+    root ={171,172};
+    terreno celda19 = terreno(60,root,col);
+
 
     SDL_Event e;    
     bool quit = false;
@@ -88,6 +113,17 @@ int main(void){
     while( quit == false ){
         SDL_RenderClear(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 255, 0,255);
+
+        celda10.draw(renderizador, capa2_text);
+        celda12.draw(renderizador, capa2_text);
+        celda13.draw(renderizador, capa2_text);
+        celda14.draw(renderizador, capa2_text);
+        celda15.draw(renderizador, capa2_text);
+        celda16.draw(renderizador, capa2_text);
+        celda17.draw(renderizador, capa2_text);
+        celda18.draw(renderizador, capa2_text);
+        celda19.draw(renderizador, capa2_text);
+
         celda.draw(renderizador, tex);
         celda2.draw(renderizador, tex);
         celda3.draw(renderizador, tex);
@@ -97,13 +133,14 @@ int main(void){
         celda7.draw(renderizador, tex);
         celda8.draw(renderizador, tex);
         celda9.draw(renderizador, tex);
-       
+
+     
         SDL_RenderDrawRect(renderizador, &rec);
 
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
         circulo.DrawCircle(renderizador);
-        mouse_box.DrawCircle(renderizador);
+        //mouse_box.DrawCircle(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
         
         SDL_RenderPresent(renderizador);
