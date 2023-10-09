@@ -6,7 +6,6 @@
 #include <setup.hpp>
 #include <grid.hpp>
 #include <circle.hpp>
-
 using namespace std;
 
 int main(void){
@@ -81,7 +80,6 @@ int main(void){
     root ={171,172};
     terreno celda19 = terreno(60,root,col);
 
-
     SDL_Event e;    
     bool quit = false;
     celda2.set_ayacent(RIGHT, &celda3);
@@ -124,7 +122,7 @@ int main(void){
         celda18.draw(renderizador, capa2_text);
         celda19.draw(renderizador, capa2_text);
 
-        celda.draw(renderizador, tex);
+        celda.draw(renderizador, capa2_text);
         celda2.draw(renderizador, tex);
         celda3.draw(renderizador, tex);
         celda4.draw(renderizador, tex);
@@ -132,7 +130,7 @@ int main(void){
         celda6.draw(renderizador, tex);
         celda7.draw(renderizador, tex);
         celda8.draw(renderizador, tex);
-        celda9.draw(renderizador, tex);
+        celda9.draw(renderizador, capa2_text);
 
      
         SDL_RenderDrawRect(renderizador, &rec);
