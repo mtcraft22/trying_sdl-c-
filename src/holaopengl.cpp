@@ -153,21 +153,24 @@ int main(int argc, char * argv[]){
             /*point in circle colison: 
             sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius*/
 
-            rec.x=e.motion.x +(rec.x+(int)(rec.w/2));
-            rec.y=e.motion.y +(rec.y+(int)(rec.h/2));
+             rec.x = e.motion.x -(int)(rec.w/2);
+             rec.y = e.motion.y -(int)(rec.h/2);
 
         }
             
             if  (
-                    sqrt(
-                        pow(circulo.getcenterx()-(rec.x+(int)(rec.w/2)),2)+
-                        pow(circulo.getcentery()-(rec.y+(int)(rec.h/2)),2)
-                    )<=circulo.getradious()+(rec.x+(int)(rec.w/2))
-                )
+                sqrt(
+                    pow(circulo.getcenterx()-(rec.x-(int)(rec.w/2)),2)+
+                    pow(circulo.getcentery()-(rec.y-(int)(rec.h/2)),2)
+                )<=circulo.getradious()+(int)(rec.w/2)||
+                sqrt(
+                    pow(circulo.getcenterx() - (rec.x - (int)(rec.w / 2)), 2) +
+                    pow(circulo.getcentery() - (rec.y - (int)(rec.h / 2)), 2)
+                ) <= circulo.getradious() + (int)(rec.h / 2))
             {
                 cout<<"circrecthit"<<endl;
             }else {
-                cout<<" "<<endl;
+            cout<<" "<<endl;
             }
         if(sqrt(pow(circulo.getcenterx()-mouse_box.getcenterx(),2)+pow(circulo.getcentery()-mouse_box.getcentery(),2))<=(circulo.getradious()+mouse_box.getradious())){
             int a = mouse_box.getcentery();
