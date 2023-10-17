@@ -1,7 +1,13 @@
 #pragma once
-#include <SDL.h>
+
+#include "SDL_rect.h"
+#include "SDL_render.h"
 #include <iostream>
 #include <string>
+
+#include <SDL.h>
+
+#include <circle.hpp>
 
 using namespace std;
 
@@ -13,8 +19,8 @@ class Colison{
         string get_tag(){
             return this->tag;
         };
-        void oncolision(Colison colisioned,void(*colision_callback)(void));
-        void oncolision(string tag,void(*colision_callback)(void));
+        bool oncolision(SDL_Rect *box);
+        bool oncolision(Circle *box);
         void debug_colision(SDL_Renderer* rendeizer);
     protected:
         string tag;      
@@ -24,7 +30,29 @@ class Rect_colison:Colison{
         Rect_colison(string tag, SDL_Rect* box):Colison(tag){
             this->box=box;
         }
+        bool oncolision(SDL_Rect *box2detec){
+            return false;
+        }
+        bool oncolision(Circle *box2detec){
+            return false;
+        }
     private:
         SDL_Rect * box;
-        
+};
+class Circle_colison:Colison{
+    public:
+        Circle_colison(string tag, Circle* box):Colison(tag){
+            this->box=box;
+        }
+        bool oncolision(SDL_Rect *box2detec){
+            return false;
+        }
+        bool oncolision(Circle *box2detec){
+            return sqrt(pow(box2detec->getcenterx()-this->box->getcenterx(),2)+pow(box2detec->getcentery()-this->box->getcentery(),2))<=(box2detec->getradious()+this->box->getradious());
+        }
+        void debug(SDL_Renderer * renderer){
+            this->box->DrawCircle(renderer);
+        }
+    private:
+        Circle * box;
 };

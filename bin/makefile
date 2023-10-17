@@ -5,6 +5,7 @@ lib = -lSDL2 -lSDL2_image
 Include = -I../include -I/usr/include/SDL2
 CPPFLAGS= $(include) $(lib)
 COMPILER = g++
+
 all:setupsdl.o grid.o holaopengl.o circle.o
 	$(COMPILER) -o ../release/terreno.out $(objects) $(lib)
 setupsdl.o:../src/setupsdl.cpp ../include/setup.hpp

@@ -1,7 +1,5 @@
 #include <SDL.h>
-#include <variant>
-#ifndef circle
-#define circle
+#pragma once
 class Circle{
     public:
         Circle(int x, int y, int r);
@@ -29,4 +27,3 @@ class Circle{
     private:
         int x,y,r;  
 };
-#endif 

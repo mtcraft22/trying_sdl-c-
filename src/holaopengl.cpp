@@ -1,14 +1,15 @@
+#include "SDL_keycode.h"
 #include <iostream>
-#include <math.h>
-#include <SDL2/SDL.h> 
-#include <SDL2/SDL_image.h>
+#include <cmath>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include <setup.hpp>
 #include <grid.hpp>
 #include <circle.hpp>
 using namespace std;
 
-int main(void){
+int main(int argc, char * argv[]){
     if(!init_sdl()){
         cout << SDL_GetError();
         return -1;
@@ -58,29 +59,9 @@ int main(void){
     root ={161,162};
     terreno celda9 = terreno(60,root,col);
 
-    
-    root ={110,110};
-    terreno celda10 = terreno(60,root,col);
-    root ={171,110};
-    terreno celda12 = terreno(60,root,col);
-    root ={232,110};
-    terreno celda13 = terreno(60,root,col);
+    SDL_Event e;
+    SDL_MouseMotionEvent mouse;
 
-    root ={80,141};
-    terreno celda14 = terreno(60,root,col);
-    root ={141,141};
-    terreno celda15 = terreno(60,root,col);
-    root ={202,141};
-    terreno celda16 = terreno(60,root,col);
-
-    root ={50,172};    
-    terreno celda17 = terreno(60,root,col);
-    root ={111,172};
-    terreno celda18 = terreno(60,root,col);
-    root ={171,172};
-    terreno celda19 = terreno(60,root,col);
-
-    SDL_Event e;    
     bool quit = false;
     celda2.set_ayacent(RIGHT, &celda3);
     celda2.set_ayacent(LEFT, &celda);
@@ -103,24 +84,18 @@ int main(void){
 
         };
     int indices_pepe[4]= {0,1,2};
-    const SDL_Rect rec={20,20,50,50};
+    SDL_Rect rec={20,20,50,50};
 
-    SDL_MouseMotionEvent mouse;
-    Circle circulo = Circle(350,100,80);
-    Circle mouse_box = Circle(0,0,25);
-    while( quit == false ){
+
+    Circle circulo = Circle(450,200,100);
+    Circle mouse_box = Circle(450,0,25);
+    int cx,cy =0;
+    int size = 25;
+    while(!quit){
         SDL_RenderClear(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 255, 0,255);
 
-        celda10.draw(renderizador, capa2_text);
-        celda12.draw(renderizador, capa2_text);
-        celda13.draw(renderizador, capa2_text);
-        celda14.draw(renderizador, capa2_text);
-        celda15.draw(renderizador, capa2_text);
-        celda16.draw(renderizador, capa2_text);
-        celda17.draw(renderizador, capa2_text);
-        celda18.draw(renderizador, capa2_text);
-        celda19.draw(renderizador, capa2_text);
+
 
         celda.draw(renderizador, capa2_text);
         celda2.draw(renderizador, tex);
@@ -138,10 +113,11 @@ int main(void){
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
         circulo.DrawCircle(renderizador);
-        //mouse_box.DrawCircle(renderizador);
+        mouse_box.DrawCircle(renderizador);
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
         
         SDL_RenderPresent(renderizador);
+
 
         while(SDL_PollEvent( &e ))
         { 
@@ -172,24 +148,54 @@ int main(void){
                     case SDLK_f:
                         celda5.move(BOTTOM_RIGHT, 0, 1);
                         break;
+
                 }
             }
             
-            if (e.motion.y>=20 && e.motion.y<=70&&e.motion.x>=20 && e.motion.x<=70){
-                cout<<"recthit"<<endl;
-            }
             /*point in circle colison: 
             sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius*/
+
+            rec.x=e.motion.x;
+            rec.y=e.motion.y;
+
+        }
             
-            else if(sqrt(((350-e.motion.x)*(350-e.motion.x))+((100-e.motion.y)*(100-e.motion.y)))<=80){
-                cout << "hitcirc"<<endl;
+            if  (
+                    sqrt(
+                        pow(circulo.getcenterx()-(rec.x+(int)(rec.w/2)),2)+
+                        pow(circulo.getcentery()-(rec.y+(int)(rec.h/2)),2)
+                    )<=circulo.getradious()+(rec.x+(int)(rec.w/2))
+                )
+            {
+                cout<<"circrecthit"<<endl;
+            }else {
+                cout<<" "<<endl;
             }
-            else {
-                cout<<"nohit"<<endl;
+        if(sqrt(pow(circulo.getcenterx()-mouse_box.getcenterx(),2)+pow(circulo.getcentery()-mouse_box.getcentery(),2))<=(circulo.getradious()+mouse_box.getradious())){
+            int a = mouse_box.getcentery();
+            mouse_box.sety(a+=5);
+            while (sqrt(pow(circulo.getcenterx()-mouse_box.getcenterx(),2)+pow(circulo.getcentery()-mouse_box.getcentery(),2))<=(circulo.getradious()+mouse_box.getradious())){
+                if (mouse_box.getcenterx()>circulo.getcenterx()){
+                    a = mouse_box.getcenterx();
+                    mouse_box.setx(a+=5);
+                }else if(mouse_box.getcenterx()<circulo.getcenterx()){
+                    a = mouse_box.getcenterx();
+                    mouse_box.setx(a-=5);
+                } else{
+                    
+                    mouse_box.setx(445+ (rand() % 10));
+
+                }
             }
-            mouse_box.setx(e.motion.x);
-            mouse_box.sety(e.motion.y);
-        } 
+        }
+        else{
+            int a = mouse_box.getcentery();
+            mouse_box.sety(a+=5);
+        }
+
+
+        if (mouse_box.getcentery()>400){mouse_box.sety(0);mouse_box.setx(350+ (rand() % 200));}
+
     }
     
     SDL_DestroyTexture(tex);

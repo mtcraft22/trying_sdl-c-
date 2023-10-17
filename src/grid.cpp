@@ -3,7 +3,6 @@
 #include <grid.hpp>
 #include <string>
 
-
 using namespace std;
 //constructor de terreno
 
@@ -125,9 +124,8 @@ void terreno::move(enum cell_vertex side, int addx,int addy){
             }
             break;
         default:
-            throw invalid_argument{"Ilegal cell side"};
+            throw invalid_argument("El argumento para side es incorecto");
     }
-
 }
 void terreno::draw(SDL_Renderer* renderizador,SDL_Texture* tex){
     SDL_RenderGeometry(renderizador, tex, this->poligono1, 3, this->indice, 3);
