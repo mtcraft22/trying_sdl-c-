@@ -1,4 +1,3 @@
-#include "SDL_keycode.h"
 #include <iostream>
 #include <cmath>
 #include <SDL.h>
@@ -108,8 +107,7 @@ int main(int argc, char * argv[]){
         celda9.draw(renderizador, capa2_text);
 
      
-        SDL_RenderDrawRect(renderizador, &rec);
-
+        SDL_RenderDrawRect(renderizador, &rec); 
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
         SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
         circulo.DrawCircle(renderizador);
@@ -117,7 +115,7 @@ int main(int argc, char * argv[]){
         SDL_SetRenderDrawColor(renderizador, 0, 0, 0,255);
         
         SDL_RenderPresent(renderizador);
-
+        
 
         while(SDL_PollEvent( &e ))
         { 
@@ -155,8 +153,8 @@ int main(int argc, char * argv[]){
             /*point in circle colison: 
             sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius*/
 
-            rec.x=e.motion.x;
-            rec.y=e.motion.y;
+            rec.x=e.motion.x +(rec.x+(int)(rec.w/2));
+            rec.y=e.motion.y +(rec.y+(int)(rec.h/2));
 
         }
             
