@@ -169,8 +169,6 @@ int main(int argc, char * argv[]){
                 ) <= circulo.getradious() + (int)(rec.h / 2))
             {
                 cout<<"circrecthit"<<endl;
-            }else {
-            cout<<" "<<endl;
             }
         if(sqrt(pow(circulo.getcenterx()-mouse_box.getcenterx(),2)+pow(circulo.getcentery()-mouse_box.getcentery(),2))<=(circulo.getradious()+mouse_box.getradious())){
             int a = mouse_box.getcentery();
