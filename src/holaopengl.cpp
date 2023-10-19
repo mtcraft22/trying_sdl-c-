@@ -158,18 +158,10 @@ int main(int argc, char * argv[]){
 
         }
             
-            if  (
-                sqrt(
-                    pow(circulo.getcenterx()-(rec.x-(int)(rec.w/2)),2)+
-                    pow(circulo.getcentery()-(rec.y-(int)(rec.h/2)),2)
-                )<=circulo.getradious()+(int)(rec.w/2)||
-                sqrt(
-                    pow(circulo.getcenterx() - (rec.x - (int)(rec.w / 2)), 2) +
-                    pow(circulo.getcentery() - (rec.y - (int)(rec.h / 2)), 2)
-                ) <= circulo.getradious() + (int)(rec.h / 2))
-            {
-                cout<<"circrecthit"<<endl;
-            }
+        if (mouse_box.getcenterx())
+        {
+            cout<<"circrecthit"<<endl;
+        }
         if(sqrt(pow(circulo.getcenterx()-mouse_box.getcenterx(),2)+pow(circulo.getcentery()-mouse_box.getcentery(),2))<=(circulo.getradious()+mouse_box.getradious())){
             int a = mouse_box.getcentery();
             mouse_box.sety(a+=5);
