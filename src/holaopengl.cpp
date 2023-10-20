@@ -90,9 +90,14 @@ int main(int argc, char * argv[]){
     Circle mouse_box = Circle(450,0,25);
     int cx,cy =0;
     int size = 25;
+    int r, g, b, a = 0;
+    r = 0;
+    g = 255;
+    b = 0;
+    a = 255;
     while(!quit){
         SDL_RenderClear(renderizador);
-        SDL_SetRenderDrawColor(renderizador, 0, 255, 0,255);
+        SDL_SetRenderDrawColor(renderizador, r, g, b,a);
 
 
 
@@ -158,9 +163,18 @@ int main(int argc, char * argv[]){
 
         }
             
-        if (mouse_box.getcenterx())
+        if (
+            sqrt(pow(circulo.getcenterx()-rec.x,2) + pow(circulo.getcentery() - rec.y, 2))
+            <=circulo.getradious()
+           )
         {
-            cout<<"circrecthit"<<endl;
+            r = 255;
+            g = 0;
+        }
+        else
+        {
+            r = 0;
+            g = 255;
         }
         if(sqrt(pow(circulo.getcenterx()-mouse_box.getcenterx(),2)+pow(circulo.getcentery()-mouse_box.getcentery(),2))<=(circulo.getradious()+mouse_box.getradious())){
             int a = mouse_box.getcentery();
@@ -173,9 +187,7 @@ int main(int argc, char * argv[]){
                     a = mouse_box.getcenterx();
                     mouse_box.setx(a-=5);
                 } else{
-                    
                     mouse_box.setx(445+ (rand() % 10));
-
                 }
             }
         }
