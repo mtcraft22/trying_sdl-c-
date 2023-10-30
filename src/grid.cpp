@@ -25,6 +25,7 @@ terreno::terreno(int tam,SDL_Point init,SDL_Color color){
     this->indice[1]=1;
     this->indice[2]=2;
 
+
     this->poligono1[0]={(float)init.x,(float)init.y,color,0.0f,0.0f};
     this->poligono1[1]={(float)init.x+tam,(float)init.y,color,1.0f,0.0f};
     this->poligono1[2]={(float)init.x-((float)tam/2)+tam,(float)init.y+((float)tam/2),color,1.0f,1.0f};
@@ -62,7 +63,7 @@ void terreno::set_ayacent(enum sides side, terreno *celda){
 /*
     throw a ilegal argument when the side argument is wrong
 */
-void terreno::move(enum cell_vertex side, int addx,int addy){
+void terreno::move(enum cell_vertex side, float addx,float addy){
     switch (side) {
         case TOP_LEFT:
             this->celda[0].x+=addx;

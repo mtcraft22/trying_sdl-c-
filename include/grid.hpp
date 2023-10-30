@@ -15,7 +15,7 @@ class terreno{
         SDL_Vertex poligono1 [3];
         SDL_Vertex poligono2 [3];
         SDL_Point celda [6];
-        int indice[3];
+        int indice[4];
         terreno *top;
         terreno *bottom;
         terreno *left;
@@ -24,7 +24,7 @@ class terreno{
         terreno(int tam,SDL_Point init,SDL_Color color);
         
         void set_ayacent(enum sides side, terreno* terreno);
-        void move (enum cell_vertex side,int addx,int addy);
+        void move (enum cell_vertex side,float addx,float addy);
         void draw(SDL_Renderer *renderizador,SDL_Texture* tex);
 
 };

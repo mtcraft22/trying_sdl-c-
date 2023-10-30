@@ -3,9 +3,11 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include <ostream>
 #include <setup.hpp>
 #include <grid.hpp>
 #include <circle.hpp>
+#include <vector>
 using namespace std;
 
 int main(int argc, char* argv[]) {
@@ -23,53 +25,41 @@ int main(int argc, char* argv[]) {
 
     SDL_Surface* texture_surface = IMG_Load("./resources/bueno.png");
     SDL_Texture* tex = SDL_CreateTextureFromSurface(renderizador, texture_surface);
-
-    //cargamos al personaje pricipal
+    //cargamos al personaje principal
 
     SDL_Surface* pepe = IMG_Load("./resources/pepe.png");
     SDL_Texture* pepe_text = SDL_CreateTextureFromSurface(renderizador, pepe);
-    //caragamos la textura de la segunda capa
+    //cargamos la textura de la segunda capa
     SDL_Surface* segunda_capa = IMG_Load("./resources/ladrillo.png");
     SDL_Texture* capa2_text = SDL_CreateTextureFromSurface(renderizador, segunda_capa);
     if (!tex) { cout << "sdl_texture_load" << SDL_GetError() << std::endl; }
 
-    SDL_Color col{ 0xff,0xff,0xff,0xff };
+    SDL_Color col{ 0xff,0xff,0xff,0xff};
 
     SDL_Point root;
 
-    root = { 100,100 };
-    terreno celda = terreno(60, root, col);
-    root = { 161,100 };
-    terreno celda2 = terreno(60, root, col);
-    root = { 222,100 };
-    terreno celda3 = terreno(60, root, col);
+    vector<terreno> celdas ;
 
-    root = { 70,131 };
-    terreno celda4 = terreno(60, root, col);
-    root = { 131,131 };
-    terreno celda5 = terreno(60, root, col);
-    root = { 192,131 };
-    terreno celda6 = terreno(60, root, col);
+  
+    root = {100,100};
+    for (int y=1;y<10;y++){
+        
+        for (int x=1;x<10;x++){
+            
+            terreno cel = terreno(30,root,col);
+            celdas.push_back(cel);
+            root.x += 30;
+        }
+        root.y += 15;
+        root.x = 100-(15*y);
+    }
 
-    root = { 40,162 };
-    terreno celda7 = terreno(60, root, col);
-    root = { 101,162 };
-    terreno celda8 = terreno(60, root, col);
-    root = { 161,162 };
-    terreno celda9 = terreno(60, root, col);
+
 
     SDL_Event e;
     SDL_MouseMotionEvent mouse;
 
     bool quit = false;
-    celda2.set_ayacent(RIGHT, &celda3);
-    celda2.set_ayacent(LEFT, &celda);
-    celda5.set_ayacent(RIGHT, &celda6);
-    celda5.set_ayacent(TOP, &celda2);
-    celda5.set_ayacent(BOTTOM, &celda8);
-    celda5.set_ayacent(LEFT, &celda4);
-    celda8.set_ayacent(LEFT, &celda7);
-    celda8.set_ayacent(RIGHT, &celda9);
     SDL_Vertex pepe_forma[3] = {
         {200,200,col,0.0f,0.0f},
         {250,200,col,1.0f,0.0f},
@@ -95,37 +85,39 @@ int main(int argc, char* argv[]) {
     g = 255;
     b = 0;
     a = 255;
+
+    
+
+    celdas.at(0).set_ayacent(BOTTOM, &celdas.at(9));
     while (!quit) {
         SDL_RenderClear(renderizador);
-        SDL_SetRenderDrawColor(renderizador, r, g, b, a);
 
-
-
-        celda.draw(renderizador, capa2_text);
-        celda2.draw(renderizador, tex);
-        celda3.draw(renderizador, tex);
-        celda4.draw(renderizador, tex);
-        celda5.draw(renderizador, tex);
-        celda6.draw(renderizador, tex);
-        celda7.draw(renderizador, tex);
-        celda8.draw(renderizador, tex);
-        celda9.draw(renderizador, capa2_text);
-
+        SDL_SetRenderDrawColor(renderizador,r,g,b,0);
+        SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
+        for (terreno i : celdas){
+            i.draw(renderizador, tex);
+        }
+        if (celdas.at(0).poligono1[0].position.y>20){
+            celdas.at(0).move(BOTTOM_LEFT, 0, -0.3);
+        }else {
+            celdas.at(0).move(BOTTOM_LEFT, 0, 100);
+        }
+        
         //SDL_RenderDrawLine(renderizador, rec.x + (rec.w / 2), rec.y + (rec.h / 2), circulo.getcenterx(), circulo.getcentery());
-        SDL_RenderDrawRect(renderizador, &rec);
-        SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
-        SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
-        circulo.DrawCircle(renderizador);
-        mouse_box.DrawCircle(renderizador);
-        SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 255);
+        //SDL_RenderDrawRect(renderizador, &rec);
+        //SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
+        //SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
+        //circulo.DrawCircle(renderizador);
+        //mouse_box.DrawCircle(renderizador);
+        //SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 255);
 
         SDL_RenderPresent(renderizador);
-
+        SDL_SetRenderDrawColor(renderizador,0,0,0,255);
 
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT) { quit = true; }
-            else if (e.type == SDL_KEYDOWN) {
+            /*else if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
                 case SDLK_q:
                     celda5.move(TOP_LEFT, 0, -1);
@@ -153,17 +145,17 @@ int main(int argc, char* argv[]) {
                     break;
 
                 }
-            }
+            }*/
 
             /*point in circle colison:
-            sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius*/
+            sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius
 
             rec.x = e.motion.x - (int)(rec.w / 2);
-            rec.y = e.motion.y - (int)(rec.h / 2);
+            rec.y = e.motion.y - (int)(rec.h / 2);*/
 
         }
 
-        if (circulo.getcenterx() < rec.x && rec.y + (int)(rec.h / 2) == circulo.getcentery()) {
+        /*if (circulo.getcenterx() < rec.x && rec.y + (int)(rec.h / 2) == circulo.getcentery()) {
             if (
                 sqrt(pow(circulo.getcenterx() - rec.x, 2) + pow(circulo.getcentery() - (rec.y + (int)(rec.h / 2)), 2))
                 <= circulo.getradious()
@@ -259,7 +251,7 @@ int main(int argc, char* argv[]) {
         }
 
 
-        if (mouse_box.getcentery()>400){mouse_box.sety(0);mouse_box.setx(350+ (rand() % 200));}
+        if (mouse_box.getcentery()>400){mouse_box.sety(0);mouse_box.setx(350+ (rand() % 200));}*/
 
     }
     
