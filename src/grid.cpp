@@ -63,6 +63,9 @@ void terreno::set_ayacent(enum sides side, terreno *celda){
 /*
     throw a ilegal argument when the side argument is wrong
 */
+/***
+    @brief move a vertex of a grid tile
+*/
 void terreno::move(enum cell_vertex side, float addx,float addy){
     switch (side) {
         case TOP_LEFT:
@@ -128,6 +131,9 @@ void terreno::move(enum cell_vertex side, float addx,float addy){
             throw invalid_argument("El argumento para side es incorecto");
     }
 }
+/***
+@brief render a tile
+*/
 void terreno::draw(SDL_Renderer* renderizador,SDL_Texture* tex){
     SDL_RenderGeometry(renderizador, tex, this->poligono1, 3, this->indice, 3);
     SDL_RenderGeometry(renderizador, tex, this->poligono2, 3, this->indice, 3);

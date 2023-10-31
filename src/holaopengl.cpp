@@ -1,3 +1,5 @@
+#include "SDL_pixels.h"
+#include <exception>
 #include <iostream>
 #include <cmath>
 #include <SDL.h>
@@ -38,21 +40,33 @@ int main(int argc, char* argv[]) {
 
     SDL_Point root;
 
-    vector<vector<terreno>> celdas ;
-    vector<terreno> celdasx;
+    terreno celdas [10][10] = {
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},        
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},        
+
+    };
    
   
-    root = {100,100};
-    for (int y=1;y<10;y++){
-        for (int x=1;x<10;x++){
-            celdasx.clear();
+    root = {300,100};
+  
+    for (int y=0;y<9;y++){
+        for (int x=0;x<9;x++){
+            
             terreno cel = terreno(60,root,col);
-            celdasx.push_back(cel);
+            
+            celdas[y][x] = cel;
             root.x += 60;
         }
-        celdas.push_back(celdasx);
         root.y += 30;
-        root.x = 100-(30*y);
+        root.x = 300-(30*(y+1));
     }
     SDL_Event e;
     SDL_MouseMotionEvent mouse;
@@ -80,13 +94,32 @@ int main(int argc, char* argv[]) {
     g = 255;
     b = 0;
     a = 255;
+    unsigned int ycel;
+    unsigned int xcel;
     while (!quit) {
+        
         SDL_RenderClear(renderizador);
 
         SDL_SetRenderDrawColor(renderizador,r,g,b,a);
         SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
-        for (terreno i : celdas){
-            i.draw(renderizador, tex);
+        
+        if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
+            celdas[ycel][xcel].poligono1[0].color=SDL_Color{0,100,0,255};
+            celdas[ycel][xcel].poligono1[1].color=SDL_Color{0,100,0,255};
+            celdas[ycel][xcel].poligono1[2].color=SDL_Color{0,100,0,255};
+        }
+        
+        
+        for (int y=0;y<9;y++){
+            for (int x=0;x<9;x++){
+                celdas[y][x].draw(renderizador, tex);
+            }
+        }
+        if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
+            celdas[ycel][xcel].poligono1[0].color=col;
+            celdas[ycel][xcel].poligono1[1].color=col;
+            celdas[ycel][xcel].poligono1[2].color=col;
+
         }
         
         //SDL_RenderDrawLine(renderizador, rec.x + (rec.w / 2), rec.y + (rec.h / 2), circulo.getcenterx(), circulo.getcentery());
@@ -130,12 +163,15 @@ int main(int argc, char* argv[]) {
 
                 }
             }*/
-            cout << e.motion.x/30 << e.motion.y/30 << endl;
+            
+            ycel=(e.motion.y-100)/30;
+            xcel=(e.motion.x-(300-(30*(ycel+0.5))))/60 ;
+            cout << xcel << " " << ycel<<endl;
             /*point in circle colison:
             sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius
 
             rec.x = e.motion.x - (int)(rec.w / 2);
-            rec.y = e.motion.y - (int)(rec.h / 2);*/
+            rec.y = e.motion.y - (int)(rec.h / 2);*/ 
         }
         
         /*if (circulo.getcenterx() < rec.x && rec.y + (int)(rec.h / 2) == circulo.getcentery()) {
