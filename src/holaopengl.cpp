@@ -38,27 +38,24 @@ int main(int argc, char* argv[]) {
 
     SDL_Point root;
 
-    vector<terreno> celdas ;
-
+    vector<vector<terreno>> celdas ;
+    vector<terreno> celdasx;
+   
   
     root = {100,100};
     for (int y=1;y<10;y++){
-        
         for (int x=1;x<10;x++){
-            
-            terreno cel = terreno(30,root,col);
-            celdas.push_back(cel);
-            root.x += 30;
+            celdasx.clear();
+            terreno cel = terreno(60,root,col);
+            celdasx.push_back(cel);
+            root.x += 60;
         }
-        root.y += 15;
-        root.x = 100-(15*y);
+        celdas.push_back(celdasx);
+        root.y += 30;
+        root.x = 100-(30*y);
     }
-
-
-
     SDL_Event e;
     SDL_MouseMotionEvent mouse;
-
     bool quit = false;
     SDL_Vertex pepe_forma[3] = {
         {200,200,col,0.0f,0.0f},
@@ -74,8 +71,6 @@ int main(int argc, char* argv[]) {
     };
     int indices_pepe[4] = { 0,1,2 };
     SDL_Rect rec = { 20,20,50,50 };
-
-
     Circle circulo = Circle(450, 200, 100);
     Circle mouse_box = Circle(450, 0, 25);
     int cx, cy = 0;
@@ -85,22 +80,13 @@ int main(int argc, char* argv[]) {
     g = 255;
     b = 0;
     a = 255;
-
-    
-
-    celdas.at(0).set_ayacent(BOTTOM, &celdas.at(9));
     while (!quit) {
         SDL_RenderClear(renderizador);
 
-        SDL_SetRenderDrawColor(renderizador,r,g,b,0);
+        SDL_SetRenderDrawColor(renderizador,r,g,b,a);
         SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
         for (terreno i : celdas){
             i.draw(renderizador, tex);
-        }
-        if (celdas.at(0).poligono1[0].position.y>20){
-            celdas.at(0).move(BOTTOM_LEFT, 0, -0.3);
-        }else {
-            celdas.at(0).move(BOTTOM_LEFT, 0, 100);
         }
         
         //SDL_RenderDrawLine(renderizador, rec.x + (rec.w / 2), rec.y + (rec.h / 2), circulo.getcenterx(), circulo.getcentery());
@@ -110,10 +96,8 @@ int main(int argc, char* argv[]) {
         //circulo.DrawCircle(renderizador);
         //mouse_box.DrawCircle(renderizador);
         //SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 255);
-
         SDL_RenderPresent(renderizador);
         SDL_SetRenderDrawColor(renderizador,0,0,0,255);
-
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT) { quit = true; }
@@ -146,15 +130,14 @@ int main(int argc, char* argv[]) {
 
                 }
             }*/
-
+            cout << e.motion.x/30 << e.motion.y/30 << endl;
             /*point in circle colison:
             sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius
 
             rec.x = e.motion.x - (int)(rec.w / 2);
             rec.y = e.motion.y - (int)(rec.h / 2);*/
-
         }
-
+        
         /*if (circulo.getcenterx() < rec.x && rec.y + (int)(rec.h / 2) == circulo.getcentery()) {
             if (
                 sqrt(pow(circulo.getcenterx() - rec.x, 2) + pow(circulo.getcentery() - (rec.y + (int)(rec.h / 2)), 2))
@@ -254,7 +237,6 @@ int main(int argc, char* argv[]) {
         if (mouse_box.getcentery()>400){mouse_box.sety(0);mouse_box.setx(350+ (rand() % 200));}*/
 
     }
-    
     SDL_DestroyTexture(tex);
     SDL_DestroyTexture(pepe_text);
     SDL_FreeSurface(pepe);
@@ -264,6 +246,5 @@ int main(int argc, char* argv[]) {
     SDL_DestroyWindow( window );
     //Quit SDL subsystems
     SDL_Quit();
-    return 0;
-        
+    return 0; 
 }
