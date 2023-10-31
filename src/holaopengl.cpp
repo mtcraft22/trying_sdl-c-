@@ -1,3 +1,5 @@
+#include "SDL_events.h"
+#include "SDL_mouse.h"
 #include "SDL_pixels.h"
 #include <exception>
 #include <iostream>
@@ -96,6 +98,8 @@ int main(int argc, char* argv[]) {
     a = 255;
     unsigned int ycel;
     unsigned int xcel;
+    
+    terreno *seleciono = &celdas[0][0];
     while (!quit) {
         
         SDL_RenderClear(renderizador);
@@ -104,6 +108,7 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
         
         if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
+            
             celdas[ycel][xcel].poligono1[0].color=SDL_Color{0,100,0,255};
             celdas[ycel][xcel].poligono1[1].color=SDL_Color{0,100,0,255};
             celdas[ycel][xcel].poligono1[2].color=SDL_Color{0,100,0,255};
@@ -134,6 +139,17 @@ int main(int argc, char* argv[]) {
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT) { quit = true; }
+            else if (e.type==SDL_MOUSEBUTTONDOWN) {
+                switch (e.button.button) {
+                    case SDL_BUTTON_LEFT:
+                        seleciono->move(TOP_RIGHT, 1, 1);
+                        cout << "cagoen" << endl;
+                        break;
+                    case SDL_BUTTON_RIGHT:
+                        seleciono->move(TOP_RIGHT, -1, -1);
+                        break;
+                }
+            }
             /*else if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
                 case SDLK_q:
@@ -167,6 +183,10 @@ int main(int argc, char* argv[]) {
             ycel=(e.motion.y-100)/30;
             xcel=(e.motion.x-(300-(30*(ycel+0.5))))/60 ;
             cout << xcel << " " << ycel<<endl;
+             if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
+            seleciono = &celdas[ycel][xcel];
+          
+            }
             /*point in circle colison:
             sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius
 
