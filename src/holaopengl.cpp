@@ -70,8 +70,19 @@ int main(int argc, char* argv[]) {
         root.y += 30;
         root.x = 300-(30*(y+1));
     }
+
+
+    for (int y=0;y<9;y++){
+        for (int x=0;x<9;x++){   
+            
+            celdas[y][x].set_ayacent(RIGHT, &celdas[y][x+1]);
+            celdas[y][x].set_ayacent(BOTTOM, &celdas[y+1][x]);
+            
+            
+        }
+    }
     SDL_Event e;
-    SDL_MouseMotionEvent mouse;
+    
     bool quit = false;
     SDL_Vertex pepe_forma[3] = {
         {200,200,col,0.0f,0.0f},
@@ -98,7 +109,9 @@ int main(int argc, char* argv[]) {
     a = 255;
     unsigned int ycel;
     unsigned int xcel;
-    
+    float xcelreal;
+    float ycelreal;
+    float total = xcelreal -xcel;
     terreno *seleciono = &celdas[0][0];
     while (!quit) {
         
@@ -136,17 +149,37 @@ int main(int argc, char* argv[]) {
         //SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 255);
         SDL_RenderPresent(renderizador);
         SDL_SetRenderDrawColor(renderizador,0,0,0,255);
+        total = xcelreal -xcel;
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT) { quit = true; }
             else if (e.type==SDL_MOUSEBUTTONDOWN) {
                 switch (e.button.button) {
                     case SDL_BUTTON_LEFT:
-                        seleciono->move(TOP_RIGHT, 1, 1);
-                        cout << "cagoen" << endl;
+
+                        if (total > 0.5){
+                            seleciono->move(TOP_RIGHT, 0, 1);
+                            break;
+                            
+                        }
+                        else if (total <=0.5){
+                            seleciono->move(TOP_LEFT, 0, 1);
+                            break;
+                           
+                        }
+                    
                         break;
                     case SDL_BUTTON_RIGHT:
-                        seleciono->move(TOP_RIGHT, -1, -1);
+                        if (total > 0.5){
+                            seleciono->move(TOP_RIGHT, 0, -1);
+                            break;
+                           
+                        }
+                        else if (total <= 0.5) {
+                            seleciono->move(TOP_LEFT, 0, -1);
+                            break;
+                           
+                        }
                         break;
                 }
             }
@@ -180,9 +213,11 @@ int main(int argc, char* argv[]) {
                 }
             }*/
             
-            ycel=(e.motion.y-100)/30;
-            xcel=(e.motion.x-(300-(30*(ycel+0.5))))/60 ;
-            cout << xcel << " " << ycel<<endl;
+            ycel=(int)(e.motion.y-100)/30;
+            xcel=(int)(e.motion.x-(300-(30*(ycel+0.5))))/60 ;
+            ycelreal = (float)(e.motion.y-100)/30;
+            xcelreal= (e.motion.x-(300-(30*(ycel+0.5))))/60;
+            cout<< ycelreal << endl;
              if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
             seleciono = &celdas[ycel][xcel];
           
