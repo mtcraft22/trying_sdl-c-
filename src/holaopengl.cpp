@@ -111,7 +111,8 @@ int main(int argc, char* argv[]) {
     unsigned int xcel;
     float xcelreal;
     float ycelreal;
-    float total = xcelreal -xcel;
+    float xcelofft = xcelreal -xcel;
+    float ycelofft = ycelreal -ycel;
     terreno *seleciono = &celdas[0][0];
     while (!quit) {
         
@@ -149,7 +150,8 @@ int main(int argc, char* argv[]) {
         //SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 255);
         SDL_RenderPresent(renderizador);
         SDL_SetRenderDrawColor(renderizador,0,0,0,255);
-        total = xcelreal -xcel;
+        xcelofft = xcelreal -xcel;
+        ycelofft = ycelreal -ycel;
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT) { quit = true; }
@@ -157,30 +159,49 @@ int main(int argc, char* argv[]) {
                 switch (e.button.button) {
                     case SDL_BUTTON_LEFT:
 
-                        if (total > 0.5){
+                        if (xcelofft > 0.5 && ycelofft <=0.5){
                             seleciono->move(TOP_RIGHT, 0, 1);
                             break;
                             
                         }
-                        else if (total <=0.5){
+                        else if (xcelofft <=0.5 && ycelofft <=0.5){
                             seleciono->move(TOP_LEFT, 0, 1);
+                            break;
+                           
+                        }
+                        else if (xcelofft > 0.5 && ycelofft >0.5){
+                            seleciono->move(BOTTOM_RIGHT, 0, 1);
+                            break;
+                            
+                        }
+                        else if (xcelofft <=0.5 && ycelofft >0.5){
+                            seleciono->move(BOTTOM_LEFT, 0, 1);
                             break;
                            
                         }
                     
                         break;
                     case SDL_BUTTON_RIGHT:
-                        if (total > 0.5){
+                        if (xcelofft > 0.5 && ycelofft <=0.5){
                             seleciono->move(TOP_RIGHT, 0, -1);
                             break;
-                           
+                            
                         }
-                        else if (total <= 0.5) {
+                        else if (xcelofft <=0.5 && ycelofft <=0.5){
                             seleciono->move(TOP_LEFT, 0, -1);
                             break;
                            
                         }
-                        break;
+                        else if (xcelofft > 0.5 && ycelofft >0.5){
+                            seleciono->move(BOTTOM_RIGHT, 0, -1);
+                            break;
+                            
+                        }
+                        else if (xcelofft <=0.5 && ycelofft >0.5){
+                            seleciono->move(BOTTOM_LEFT, 0, -1);
+                            break;
+                           
+                        }
                 }
             }
             /*else if (e.type == SDL_KEYDOWN) {
@@ -217,7 +238,7 @@ int main(int argc, char* argv[]) {
             xcel=(int)(e.motion.x-(300-(30*(ycel+0.5))))/60 ;
             ycelreal = (float)(e.motion.y-100)/30;
             xcelreal= (e.motion.x-(300-(30*(ycel+0.5))))/60;
-            cout<< ycelreal << endl;
+            
              if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
             seleciono = &celdas[ycel][xcel];
           
