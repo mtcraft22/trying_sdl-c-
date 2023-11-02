@@ -77,6 +77,9 @@ int main(int argc, char* argv[]) {
             
             celdas[y][x].set_ayacent(RIGHT, &celdas[y][x+1]);
             celdas[y][x].set_ayacent(BOTTOM, &celdas[y+1][x]);
+            if (x>0){
+                celdas[y][x].set_ayacent(LEFT, &celdas[y][x-1]);
+            }
             
             
         }
