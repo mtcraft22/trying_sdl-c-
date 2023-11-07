@@ -1,3 +1,4 @@
+#include "SDL_events.h"
 #include <SDL.h> 
 #include <iostream>
 #include <grid.hpp>
@@ -13,13 +14,15 @@ terreno::terreno(int tam,SDL_Point init,SDL_Color color){
     this->bottom=NULL;
     this->left=NULL;
     this->right=NULL;
-    this->celda[0]={init.x,init.y};
-    this->celda[1]={init.x+tam,init.y};
-    this->celda[2]={init.x-(tam/2)+tam,init.y+(tam/2)};
+    this->tam= tam;
 
-    this->celda[3]={init.x-(tam/2),init.y+(tam/2)};
+    this->celda[0]={init.x,init.y};
+    this->celda[1]={init.x+this->tam,init.y};
+    this->celda[2]={init.x-(this->tam/2)+this->tam,init.y+(this->tam/2)};
+
+    this->celda[3]={init.x-(this->tam/2),init.y+(this->tam/2)};
     this->celda[4]={init.x,init.y};
-    this->celda[5]={init.x-(tam/2)+tam,init.y+(tam/2)};
+    this->celda[5]={init.x-(this->tam/2)+this->tam,init.y+(this->tam/2)};
     
     this->indice[0]=0;
     this->indice[1]=1;
@@ -138,4 +141,9 @@ void terreno::draw(SDL_Renderer* renderizador,SDL_Texture* tex){
     SDL_RenderGeometry(renderizador, tex, this->poligono1, 3, this->indice, 3);
     SDL_RenderGeometry(renderizador, tex, this->poligono2, 3, this->indice, 3);
     SDL_RenderDrawLines(renderizador, this->celda, 6);
+}
+bool terreno::mouse_hit(SDL_Event *e){
+    int yoff  = e->motion.y -this->poligono1[0].position.y ;
+    bool iny = e->motion.y > this->poligono1[0].position.y && e->motion.y < (this->poligono1[0].position.y + (int)(this->tam/2);
+    return ;
 }

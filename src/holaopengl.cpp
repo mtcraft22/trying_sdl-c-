@@ -71,9 +71,9 @@ int main(int argc, char* argv[]) {
         root.x = 300-(30*(y+1));
     }
 
-
-    for (int y=0;y<9;y++){
-        for (int x=0;x<9;x++){   
+    
+    for (int y= 0;y<9;y++){
+        for (int x = 0;x<9;x++){   
             
             celdas[y][x].set_ayacent(RIGHT, &celdas[y][x+1]);
             celdas[y][x].set_ayacent(BOTTOM, &celdas[y+1][x]);
@@ -124,12 +124,7 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderizador,r,g,b,a);
         SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
         
-        if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
-            
-            celdas[ycel][xcel].poligono1[0].color=SDL_Color{0,100,0,255};
-            celdas[ycel][xcel].poligono1[1].color=SDL_Color{0,100,0,255};
-            celdas[ycel][xcel].poligono1[2].color=SDL_Color{0,100,0,255};
-        }
+        
         
         
         for (int y=0;y<9;y++){
@@ -250,7 +245,20 @@ int main(int argc, char* argv[]) {
             sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius
 
             rec.x = e.motion.x - (int)(rec.w / 2);
-            rec.y = e.motion.y - (int)(rec.h / 2);*/ 
+            rec.y = e.motion.y - (int)(rec.h / 2);*/
+            for (int y=0;y<9;y++){
+                    for (int x=0;x<9;x++){
+                        if (celdas[y][x].mouse_hit(&e)){
+                        celdas[y][x].poligono1[0].color=SDL_Color{0,100,0,255};
+                        celdas[y][x].poligono1[1].color=SDL_Color{0,100,0,255};
+                        celdas[y][x].poligono1[2].color=SDL_Color{0,100,0,255};
+                        }else {
+                            celdas[y][x].poligono1[0].color=col;
+                            celdas[y][x].poligono1[1].color=col;
+                            celdas[y][x].poligono1[2].color=col;
+                        }
+                    }
+                }
         }
         
         /*if (circulo.getcenterx() < rec.x && rec.y + (int)(rec.h / 2) == circulo.getcentery()) {

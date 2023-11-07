@@ -1,4 +1,5 @@
 
+#include "SDL_events.h"
 #include <SDL.h>
 #include <iostream>
 #include <optional>
@@ -16,6 +17,7 @@ class terreno{
         SDL_Vertex poligono2 [3];
         SDL_Point celda [6];
         int indice[4];
+        int tam;
         terreno *top;
         terreno *bottom;
         terreno *left;
@@ -26,7 +28,7 @@ class terreno{
         void set_ayacent(enum sides side, terreno* terreno);
         void move (enum cell_vertex side,float addx,float addy);
         void draw(SDL_Renderer *renderizador,SDL_Texture* tex);
-
+        bool mouse_hit(SDL_Event * e);
 };
 
 #endif
