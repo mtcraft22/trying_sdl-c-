@@ -144,6 +144,6 @@ void terreno::draw(SDL_Renderer* renderizador,SDL_Texture* tex){
 }
 bool terreno::mouse_hit(SDL_Event *e){
     int yoff  = e->motion.y -this->poligono1[0].position.y ;
-    bool iny = e->motion.y > this->poligono1[0].position.y && e->motion.y < (this->poligono1[0].position.y + (int)(this->tam/2);
+    bool iny = e->motion.y > this->poligono1[0].position.y && e->motion.y < (this->poligono1[0].position.y + (int)(this->tam/2));
     return ;
 }
