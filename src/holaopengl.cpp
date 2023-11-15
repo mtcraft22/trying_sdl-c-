@@ -74,34 +74,27 @@ int main(int argc, char* argv[]) {
             celdas[y][x].set_ayacent(RIGHT, &celdas[y][x + 1]);
             celdas[y][x].set_ayacent(BOTTOM, &celdas[y+1][x]);
 
-            if (x - 1 > 0) {
+            if ((x - 1) >= 0) {
                 celdas[y][x].set_ayacent(LEFT, &celdas[y][x - 1]);
             }
-            if (y - 1 > 0) {
+            if ((y - 1) >= 0) {
                 celdas[y][x].set_ayacent(TOP, &celdas[y-1][x]);
             }
             
         }
         
     }
-   
-
-   
-    
     SDL_Event e;
-    
     bool quit = false;
     SDL_Vertex pepe_forma[3] = {
         {200,200,col,0.0f,0.0f},
         {250,200,col,1.0f,0.0f},
         {200,250,col,0.0f,1.0f}
-
     };
     SDL_Vertex pepe_forma2[3] = {
         {200,250,col,0.0f,1.0f},
         {250,250,col,1.0f,1.0f},
         {250,200,col,1.0f,0.0f}
-
     };
     int indices_pepe[4] = { 0,1,2 };
     SDL_Rect rec = { 20,20,50,50 };
@@ -130,7 +123,7 @@ int main(int argc, char* argv[]) {
         
         for (int y=0;y<9;y++){
             for (int x=0;x<9;x++){
-                celdas[y][x].draw(renderizador, capa2_text);
+                celdas[y][x].draw(renderizador, tex);
             }
         }
        
