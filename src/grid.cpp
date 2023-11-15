@@ -1,5 +1,6 @@
 #include "SDL_events.h"
 #include <SDL.h> 
+#include <cstddef>
 #include <iostream>
 #include <grid.hpp>
 #include <string>
@@ -104,12 +105,7 @@ void terreno::move(enum cell_vertex side, float addx,float addy){
                 this->left->celda[1].y += addy;
                 this->left->poligono1[1].position.x = (float)this->left->celda[1].x;
                 this->left->poligono1[1].position.y = (float)this->left->celda[1].y;
-                if (this->left->bottom != NULL) {
-                    this->left->bottom->celda[1].x += addx;
-                    this->left->bottom->celda[1].y += addy;
-                    this->left->bottom->poligono1[1].position.x = (float)this->left->bottom->celda[1].x;
-                    this->left->bottom->poligono1[1].position.y = (float)this->left->bottom->celda[1].y;
-                }
+                
                 
             }
             break;
@@ -129,16 +125,7 @@ void terreno::move(enum cell_vertex side, float addx,float addy){
                 this->right->poligono1[0].position.y = (float)this->right->celda[0].y;
                 this->right->poligono2[1].position.x = (float)this->right->celda[4].x;
                 this->right->poligono2[1].position.y = (float)this->right->celda[4].y;
-                if (this->right->bottom != NULL) {
-                    this->right->bottom->celda[0].x += addx;
-                    this->right->bottom->celda[0].y += addy;
-                    this->right->bottom->celda[4].x += addx;
-                    this->right->bottom->celda[4].y += addy;
-                    this->right->bottom->poligono1[0].position.x = (float)this->right->bottom->celda[0].x;
-                    this->right->bottom->poligono1[0].position.y = (float)this->right->bottom->celda[0].y;
-                    this->right->bottom->poligono2[1].position.x = (float)this->right->bottom->celda[4].x;
-                    this->right->bottom->poligono2[1].position.y = (float)this->right->bottom->celda[4].y;
-                }
+               
                 if (this->right->top) {
                     this->right->top->celda[3].x += addx;
                     this->right->top->celda[3].y += addy;
@@ -173,6 +160,16 @@ void terreno::move(enum cell_vertex side, float addx,float addy){
                 this->right->celda[3].y += addy;
                 this->right->poligono2[0].position.x = (float)this->right->celda[3].x;
                 this->right->poligono2[0].position.y = (float)this->right->celda[3].y;
+                if (this->right->bottom){
+                    this->right->bottom->celda[0].x+=addx;
+                    this->right->bottom->celda[0].y+=addy;
+                    this->right->bottom->celda[4].x+=addx;
+                    this->right->bottom->celda[4].y+=addy;
+                    this->right->bottom->poligono1[0].position.x=(float)this->right->bottom->celda[0].x;
+                    this->right->bottom->poligono1[0].position.y=(float)this->right->bottom->celda[0].y;
+                    this->right->bottom->poligono2[1].position.x=(float)this->right->bottom->celda[4].x;
+                    this->right->bottom->poligono2[1].position.y=(float)this->right->bottom->celda[4].y;
+                }
             }
             if (this->bottom != NULL){
                 //this->bottom->move(TOP_RIGHT, addx, addy);
@@ -198,6 +195,13 @@ void terreno::move(enum cell_vertex side, float addx,float addy){
                 this->left->poligono2[2].position.y = (float)this->left->celda[5].y;
                 this->left->poligono1[2].position.x = (float)this->left->celda[2].x;
                 this->left->poligono2[2].position.x = (float)this->left->celda[5].x;
+                if(this->left->bottom != NULL){
+                    this->left->bottom->celda[1].x+=addx;
+                    this->left->bottom->celda[1].y+=addy;
+                    this->left->bottom->poligono1[1].position.x=(float)this->left->bottom->celda[1].x;
+                    this->left->bottom->poligono1[1].position.y=(float)this->left->bottom->celda[1].y;
+                }
+
             }
             if (this->bottom != NULL){
                 //this->bottom->move(TOP_LEFT, addx, addy);
