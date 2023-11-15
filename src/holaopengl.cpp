@@ -95,6 +95,7 @@ int main(int argc, char* argv[]) {
         {200,250,col,0.0f,1.0f},
         {250,250,col,1.0f,1.0f},
         {250,200,col,1.0f,0.0f}
+
     };
     int indices_pepe[4] = { 0,1,2 };
     SDL_Rect rec = { 20,20,50,50 };

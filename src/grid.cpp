@@ -97,16 +97,7 @@ void terreno::move(enum cell_vertex side, float addx,float addy){
                     this->top->left->poligono1[2].position.x = (float)this->top->left->celda[2].x;
                     this->top->left->poligono2[2].position.x = (float)this->top->left->celda[5].x;
                 }
-                if (this->top->right != NULL) {
-                    this->top->right->celda[5].y += addy;
-                    this->top->right->celda[2].y += addy;
-                    this->top->right->celda[5].x += addx;
-                    this->top->right->celda[2].x += addx;
-                    this->top->right->poligono1[2].position.y = (float)this->top->right->celda[2].y;
-                    this->top->right->poligono2[2].position.y = (float)this->top->right->celda[5].y;
-                    this->top->right->poligono1[2].position.x = (float)this->top->right->celda[2].x;
-                    this->top->right->poligono2[2].position.x = (float)this->top->right->celda[5].x;
-                }
+                
             }
             if (this->left != NULL){
                 this->left->celda[1].x += addx;
@@ -119,16 +110,7 @@ void terreno::move(enum cell_vertex side, float addx,float addy){
                     this->left->bottom->poligono1[1].position.x = (float)this->left->bottom->celda[1].x;
                     this->left->bottom->poligono1[1].position.y = (float)this->left->bottom->celda[1].y;
                 }
-                if (this->left->top) {
-                    this->left->top->celda[5].y += addy;
-                    this->left->top->celda[2].y += addy;
-                    this->left->top->celda[5].x += addx;
-                    this->left->top->celda[2].x += addx;
-                    this->left->top->poligono1[2].position.y = (float)this->left->top->celda[2].y;
-                    this->left->top->poligono2[2].position.y = (float)this->left->top->celda[5].y;
-                    this->left->top->poligono1[2].position.x = (float)this->left->top->celda[2].x;
-                    this->left->top->poligono2[2].position.x = (float)this->left->top->celda[5].x;
-                }
+                
             }
             break;
 
@@ -147,6 +129,22 @@ void terreno::move(enum cell_vertex side, float addx,float addy){
                 this->right->poligono1[0].position.y = (float)this->right->celda[0].y;
                 this->right->poligono2[1].position.x = (float)this->right->celda[4].x;
                 this->right->poligono2[1].position.y = (float)this->right->celda[4].y;
+                if (this->right->bottom != NULL) {
+                    this->right->bottom->celda[0].x += addx;
+                    this->right->bottom->celda[0].y += addy;
+                    this->right->bottom->celda[4].x += addx;
+                    this->right->bottom->celda[4].y += addy;
+                    this->right->bottom->poligono1[0].position.x = (float)this->right->bottom->celda[0].x;
+                    this->right->bottom->poligono1[0].position.y = (float)this->right->bottom->celda[0].y;
+                    this->right->bottom->poligono2[1].position.x = (float)this->right->bottom->celda[4].x;
+                    this->right->bottom->poligono2[1].position.y = (float)this->right->bottom->celda[4].y;
+                }
+                if (this->right->top) {
+                    this->right->top->celda[3].x += addx;
+                    this->right->top->celda[3].y += addy;
+                    this->right->top->poligono2[0].position.x = (float)this->right->top->celda[3].x;
+                    this->right->top->poligono2[0].position.y = (float)this->right->top->celda[3].y;
+                }
             }
             if (this->top != NULL){
                 //this->top->move(BOTTOM_RIGHT,addx, addy);
