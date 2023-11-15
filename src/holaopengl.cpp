@@ -38,11 +38,11 @@ int main(int argc, char* argv[]) {
     SDL_Texture* capa2_text = SDL_CreateTextureFromSurface(renderizador, segunda_capa);
     if (!tex) { cout << "sdl_texture_load" << SDL_GetError() << std::endl; }
 
-    SDL_Color col{ 0xff,0xff,0xff,0xff};
+    SDL_Color col{ 0xff,0xff,0xff,0xff };
 
     SDL_Point root;
-
-    terreno celdas [10][10] = {
+    root = { 0,0 };
+    terreno celdas[10][10] = {
         {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
         {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
         {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
@@ -51,39 +51,43 @@ int main(int argc, char* argv[]) {
         {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
         {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
         {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
-        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},        
-        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},        
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
+        {terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col),terreno(0,root,col)},
 
     };
-   
-  
-    root = {300,100};
-  
-    for (int y=0;y<9;y++){
-        for (int x=0;x<9;x++){
-            
-            terreno cel = terreno(60,root,col);
-            
+    root = { 300,100 };
+
+    for (int y = 0; y < 9; y++) {
+        for (int x = 0; x < 9; x++) {
+
+            terreno cel = terreno(60, root, col);
+
             celdas[y][x] = cel;
             root.x += 60;
         }
         root.y += 30;
-        root.x = 300-(30*(y+1));
+        root.x = 300 - (30 * (y + 1));
     }
 
-    
-    for (int y= 0;y<9;y++){
-        for (int x = 0;x<9;x++){   
-            
-            celdas[y][x].set_ayacent(RIGHT, &celdas[y][x+1]);
+    for (int y = 0; y < 9; y++) {
+        for (int x = 0; x < 9; x++) {
+            celdas[y][x].set_ayacent(RIGHT, &celdas[y][x + 1]);
             celdas[y][x].set_ayacent(BOTTOM, &celdas[y+1][x]);
-            if (x>0){
-                celdas[y][x].set_ayacent(LEFT, &celdas[y][x-1]);
+
+            if (x - 1 > 0) {
+                celdas[y][x].set_ayacent(LEFT, &celdas[y][x - 1]);
+            }
+            if (y - 1 > 0) {
+                celdas[y][x].set_ayacent(TOP, &celdas[y-1][x]);
             }
             
-            
         }
+        
     }
+   
+
+   
+    
     SDL_Event e;
     
     bool quit = false;
@@ -110,12 +114,9 @@ int main(int argc, char* argv[]) {
     g = 255;
     b = 0;
     a = 255;
-    unsigned int ycel;
-    unsigned int xcel;
-    float xcelreal;
-    float ycelreal;
-    float xcelofft = xcelreal -xcel;
-    float ycelofft = ycelreal -ycel;
+ 
+    float* grid_colision_offsets[2] = { 0,0 };
+    
     terreno *seleciono = &celdas[0][0];
     while (!quit) {
         
@@ -129,15 +130,10 @@ int main(int argc, char* argv[]) {
         
         for (int y=0;y<9;y++){
             for (int x=0;x<9;x++){
-                celdas[y][x].draw(renderizador, tex);
+                celdas[y][x].draw(renderizador, capa2_text);
             }
         }
-        if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
-            celdas[ycel][xcel].poligono1[0].color=col;
-            celdas[ycel][xcel].poligono1[1].color=col;
-            celdas[ycel][xcel].poligono1[2].color=col;
-
-        }
+       
         
         //SDL_RenderDrawLine(renderizador, rec.x + (rec.w / 2), rec.y + (rec.h / 2), circulo.getcenterx(), circulo.getcentery());
         //SDL_RenderDrawRect(renderizador, &rec);
@@ -148,60 +144,27 @@ int main(int argc, char* argv[]) {
         //SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 255);
         SDL_RenderPresent(renderizador);
         SDL_SetRenderDrawColor(renderizador,0,0,0,255);
-        xcelofft = xcelreal -xcel;
-        ycelofft = ycelreal -ycel;
+      
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT) { quit = true; }
             else if (e.type==SDL_MOUSEBUTTONDOWN) {
                 switch (e.button.button) {
                     case SDL_BUTTON_LEFT:
-
-                        if (xcelofft > 0.5 && ycelofft <=0.5){
-                            seleciono->move(TOP_RIGHT, 0, 1);
-                            break;
-                            
-                        }
-                        else if (xcelofft <=0.5 && ycelofft <=0.5){
-                            seleciono->move(TOP_LEFT, 0, 1);
-                            break;
-                           
-                        }
-                        else if (xcelofft > 0.5 && ycelofft >0.5){
-                            seleciono->move(BOTTOM_RIGHT, 0, 1);
-                            break;
-                            
-                        }
-                        else if (xcelofft <=0.5 && ycelofft >0.5){
-                            seleciono->move(BOTTOM_LEFT, 0, 1);
-                            break;
-                           
-                        }
-                    
+                        seleciono->move(TOP_RIGHT, 0,1);
+                        seleciono->move(TOP_LEFT, 0, 1);
+                        seleciono->move(BOTTOM_LEFT, 0, 1);
+                        seleciono->move(BOTTOM_RIGHT, 0, 1);
                         break;
                     case SDL_BUTTON_RIGHT:
-                        if (xcelofft > 0.5 && ycelofft <=0.5){
-                            seleciono->move(TOP_RIGHT, 0, -1);
-                            break;
-                            
-                        }
-                        else if (xcelofft <=0.5 && ycelofft <=0.5){
-                            seleciono->move(TOP_LEFT, 0, -1);
-                            break;
-                           
-                        }
-                        else if (xcelofft > 0.5 && ycelofft >0.5){
-                            seleciono->move(BOTTOM_RIGHT, 0, -1);
-                            break;
-                            
-                        }
-                        else if (xcelofft <=0.5 && ycelofft >0.5){
-                            seleciono->move(BOTTOM_LEFT, 0, -1);
-                            break;
-                           
-                        }
+                        seleciono->move(TOP_RIGHT, 0, -1);
+                        seleciono->move(TOP_LEFT, 0, -1);
+                        seleciono->move(BOTTOM_LEFT, 0, -1);
+                        seleciono->move(BOTTOM_RIGHT, 0, -1);
+                        break;
                 }
             }
+            
             /*else if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
                 case SDLK_q:
@@ -232,27 +195,29 @@ int main(int argc, char* argv[]) {
                 }
             }*/
             
-            ycel=(int)(e.motion.y-100)/30;
+           /*ycel = (int)(e.motion.y - 100) / 30;
             xcel=(int)(e.motion.x-(300-(30*(ycel+0.5))))/60 ;
             ycelreal = (float)(e.motion.y-100)/30;
-            xcelreal= (e.motion.x-(300-(30*(ycel+0.5))))/60;
+            xcelreal= (e.motion.x-(300-(30*(ycel+0.5))))/60;*/
             
-             if ((ycel>=0 && ycel<=8)&&(xcel>=0 && xcel<=8)){
+             /*if ((ycel >= 0 && ycel <= 8) && (xcel >= 0 && xcel <= 8)) {
             seleciono = &celdas[ycel][xcel];
           
-            }
+            }*/
             /*point in circle colison:
             sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius
 
             rec.x = e.motion.x - (int)(rec.w / 2);
             rec.y = e.motion.y - (int)(rec.h / 2);*/
             for (int y=0;y<9;y++){
-                    for (int x=0;x<9;x++){
-                        if (celdas[y][x].mouse_hit(&e)){
+                for (int x=0;x<9;x++){
+                    if (celdas[y][x].mouse_hit(&e)){
                         celdas[y][x].poligono1[0].color=SDL_Color{0,100,0,255};
                         celdas[y][x].poligono1[1].color=SDL_Color{0,100,0,255};
                         celdas[y][x].poligono1[2].color=SDL_Color{0,100,0,255};
-                        }else {
+                        seleciono = &celdas[y][x];
+                    }
+                    else {
                             celdas[y][x].poligono1[0].color=col;
                             celdas[y][x].poligono1[1].color=col;
                             celdas[y][x].poligono1[2].color=col;
