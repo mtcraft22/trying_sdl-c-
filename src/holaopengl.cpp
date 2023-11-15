@@ -127,15 +127,6 @@ int main(int argc, char* argv[]) {
                 celdas[y][x].draw(renderizador, tex);
             }
         }
-       
-        
-        //SDL_RenderDrawLine(renderizador, rec.x + (rec.w / 2), rec.y + (rec.h / 2), circulo.getcenterx(), circulo.getcentery());
-        //SDL_RenderDrawRect(renderizador, &rec);
-        //SDL_RenderGeometry(renderizador, pepe_text, pepe_forma, 3, indices_pepe, 3);
-        //SDL_RenderGeometry(renderizador, pepe_text, pepe_forma2, 3, indices_pepe, 3);
-        //circulo.DrawCircle(renderizador);
-        //mouse_box.DrawCircle(renderizador);
-        //SDL_SetRenderDrawColor(renderizador, 0, 0, 0, 255);
         SDL_RenderPresent(renderizador);
         SDL_SetRenderDrawColor(renderizador,0,0,0,255);
       
@@ -159,50 +150,8 @@ int main(int argc, char* argv[]) {
                 }
             }
             
-            /*else if (e.type == SDL_KEYDOWN) {
-                switch (e.key.keysym.sym) {
-                case SDLK_q:
-                    celda5.move(TOP_LEFT, 0, -1);
-                    break;
-                case SDLK_a:
-                    celda5.move(TOP_LEFT, 0, 1);
-                    break;
-                case SDLK_w:
-                    celda5.move(TOP_RIGHT, 0, -1);
-                    break;
-                case SDLK_s:
-                    celda5.move(TOP_RIGHT, 0, 1);
-                    break;
-                case SDLK_e:
-                    celda5.move(BOTTOM_LEFT, 0, -1);
-                    break;
-                case SDLK_d:
-                    celda5.move(BOTTOM_LEFT, 0, 1);
-                    break;
-                case SDLK_r:
-                    celda5.move(BOTTOM_RIGHT, 0, -1);
-                    break;
-                case SDLK_f:
-                    celda5.move(BOTTOM_RIGHT, 0, 1);
-                    break;
-
-                }
-            }*/
             
-           /*ycel = (int)(e.motion.y - 100) / 30;
-            xcel=(int)(e.motion.x-(300-(30*(ycel+0.5))))/60 ;
-            ycelreal = (float)(e.motion.y-100)/30;
-            xcelreal= (e.motion.x-(300-(30*(ycel+0.5))))/60;*/
-            
-             /*if ((ycel >= 0 && ycel <= 8) && (xcel >= 0 && xcel <= 8)) {
-            seleciono = &celdas[ycel][xcel];
-          
-            }*/
-            /*point in circle colison:
-            sqrt((circle.centerx-entity.x*circle.centerx-entity.x)+(circle.centery-entity.y*circle.centery-entity.y))<=circle.radius
-
-            rec.x = e.motion.x - (int)(rec.w / 2);
-            rec.y = e.motion.y - (int)(rec.h / 2);*/
+        
             for (int y=0;y<9;y++){
                 for (int x=0;x<9;x++){
                     if (celdas[y][x].mouse_hit(&e)){
@@ -220,103 +169,9 @@ int main(int argc, char* argv[]) {
                 }
         }
         
-        /*if (circulo.getcenterx() < rec.x && rec.y + (int)(rec.h / 2) == circulo.getcentery()) {
-            if (
-                sqrt(pow(circulo.getcenterx() - rec.x, 2) + pow(circulo.getcentery() - (rec.y + (int)(rec.h / 2)), 2))
-                <= circulo.getradious()
-                )
-            {
-                r = 255;
-                g = 0;
-            }
-            else
-            {
-                r = 0;
-                g = 255;
-            }
-        }
-        else if (circulo.getcenterx() < rec.x && rec.y > circulo.getcentery()) {
-            if (
-                sqrt(pow(circulo.getcenterx() - rec.x, 2) + pow(circulo.getcentery() - rec.y, 2))
-                <= circulo.getradious()
-                )
-            {
-                r = 255;
-                g = 0;
-            }
-            else
-            {
-                r = 0;
-                g = 255;
-            }
-        }
-        else if (circulo.getcenterx() == rec.x+(int)(rec.w / 2) && rec.y > circulo.getcentery()) {
-            if (
-                sqrt(pow(circulo.getcenterx() - (rec.x+(int)(rec.w / 2)), 2) + pow(circulo.getcentery() - rec.y , 2))
-                <= circulo.getradious()
-                )
-            {
-                r = 255;
-                g = 0;
-            }
-            else
-            {
-                r = 0;
-                g = 255;
-            }
-        }
-        else if (circulo.getcenterx() > rec.x && rec.y > circulo.getcentery()) {
-            if (
-                sqrt(pow(circulo.getcenterx() - (rec.x + rec.w), 2) + pow(circulo.getcentery() - rec.y, 2))
-                <= circulo.getradious()
-                )
-            {
-                r = 255;
-                g = 0;
-            }
-            else
-            {
-                r = 0;
-                g = 255;
-            }
-        }
-        if (circulo.getcenterx() > rec.x && rec.y + (int)(rec.h / 2) == circulo.getcentery()) {
-            if (
-                sqrt(pow(circulo.getcenterx() - (rec.x+rec.w), 2) + pow(circulo.getcentery() - (rec.y + (int)(rec.h / 2)), 2))
-                <= circulo.getradious()
-                )
-            {
-                r = 255;
-                g = 0;
-            }
-            else
-            {
-                r = 0;
-                g = 255;
-            }
-        }
-        if(sqrt(pow(circulo.getcenterx()-mouse_box.getcenterx(),2)+pow(circulo.getcentery()-mouse_box.getcentery(),2))<=(circulo.getradious()+mouse_box.getradious())){
-            int a = mouse_box.getcentery();
-            mouse_box.sety(a+=5);
-            while (sqrt(pow(circulo.getcenterx()-mouse_box.getcenterx(),2)+pow(circulo.getcentery()-mouse_box.getcentery(),2))<=(circulo.getradious()+mouse_box.getradious())){
-                if (mouse_box.getcenterx()>circulo.getcenterx()){
-                    a = mouse_box.getcenterx();
-                    mouse_box.setx(a+=5);
-                }else if(mouse_box.getcenterx()<circulo.getcenterx()){
-                    a = mouse_box.getcenterx();
-                    mouse_box.setx(a-=5);
-                } else{
-                    mouse_box.setx(445+ (rand() % 10));
-                }
-            }
-        }
-        else{
-            int a = mouse_box.getcentery();
-            mouse_box.sety(a+=5);
-        }
-
-
-        if (mouse_box.getcentery()>400){mouse_box.sety(0);mouse_box.setx(350+ (rand() % 200));}*/
+        
+           
+        
 
     }
     SDL_DestroyTexture(tex);
