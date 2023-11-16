@@ -169,10 +169,8 @@ int main(int argc, char* argv[]) {
                         celdas[y][x].poligono1[2].color=SDL_Color{0,100,0,255};
                         seleciono = &celdas[y][x];
                     }else if (celdas[y][x].point_hit(bolita.getcenterx(), bolita.getcentery())) {
-                        celdas[y][x].poligono1[0].color = SDL_Color{ 100,0,0,255 };
-                        celdas[y][x].poligono1[1].color = SDL_Color{ 100,0,0,255 };
-                        celdas[y][x].poligono1[2].color = SDL_Color{ 100,0,0,255 };
-
+                        if ()
+                        bolita.setx(bolita.getcenterx() + 4);
                     }
                     
                     else {
