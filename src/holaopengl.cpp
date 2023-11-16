@@ -22,15 +22,17 @@ int main(int argc, char* argv[]) {
     SDL_Window* window;
     window = make_window_();
     if (!window) {
-        cout << "No se inició pantalla" << SDL_GetError();
+        cout << "No se inició pantalla: " << SDL_GetError();
         return -1;
     }
     SDL_Renderer* renderizador = SDL_CreateRenderer(window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     SDL_Surface* texture_surface = IMG_Load("./resources/bueno.png");
     SDL_Texture* tex = SDL_CreateTextureFromSurface(renderizador, texture_surface);
+    //cargamos awita
+    SDL_Surface* awita_surface = IMG_Load("./resources/awita.png");
+    SDL_Texture* awita = SDL_CreateTextureFromSurface(renderizador, awita_surface);
     //cargamos al personaje principal
-
     SDL_Surface* pepe = IMG_Load("./resources/pepe.png");
     SDL_Texture* pepe_text = SDL_CreateTextureFromSurface(renderizador, pepe);
     //cargamos la textura de la segunda capa
@@ -112,21 +114,28 @@ int main(int argc, char* argv[]) {
     float* grid_colision_offsets[2] = { 0,0 };
     
     terreno *seleciono = &celdas[0][0];
+    Circle bolita = Circle(300+(30*5), 100+(15*5), 10);
+
     while (!quit) {
         
         SDL_RenderClear(renderizador);
-
-        SDL_SetRenderDrawColor(renderizador,r,g,b,a);
-        SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
+        SDL_SetRenderDrawColor(renderizador, r, g, b, a);
         
+        //SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
+        
+     
         
         
         
         for (int y=0;y<9;y++){
             for (int x=0;x<9;x++){
                 celdas[y][x].draw(renderizador, tex);
+                
             }
         }
+        SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
+        
+        bolita.DrawCircle(renderizador);
         SDL_RenderPresent(renderizador);
         SDL_SetRenderDrawColor(renderizador,0,0,0,255);
       
@@ -136,16 +145,16 @@ int main(int argc, char* argv[]) {
             else if (e.type==SDL_MOUSEBUTTONDOWN) {
                 switch (e.button.button) {
                     case SDL_BUTTON_LEFT:
-                        seleciono->move(TOP_RIGHT, 0,1);
-                        seleciono->move(TOP_LEFT, 0, 1);
-                        seleciono->move(BOTTOM_LEFT, 0, 1);
-                        seleciono->move(BOTTOM_RIGHT, 0, 1);
+                        seleciono->move(TOP_RIGHT, 0,3);
+                        seleciono->move(TOP_LEFT, 0, 3);
+                        seleciono->move(BOTTOM_LEFT, 0, 3);
+                        seleciono->move(BOTTOM_RIGHT, 0, 3);
                         break;
                     case SDL_BUTTON_RIGHT:
-                        seleciono->move(TOP_RIGHT, 0, -1);
-                        seleciono->move(TOP_LEFT, 0, -1);
-                        seleciono->move(BOTTOM_LEFT, 0, -1);
-                        seleciono->move(BOTTOM_RIGHT, 0, -1);
+                        seleciono->move(TOP_RIGHT, 0, -3);
+                        seleciono->move(TOP_LEFT, 0, -3);
+                        seleciono->move(BOTTOM_LEFT, 0, -3);
+                        seleciono->move(BOTTOM_RIGHT, 0, -3);
                         break;
                 }
             }
@@ -154,19 +163,26 @@ int main(int argc, char* argv[]) {
         
             for (int y=0;y<9;y++){
                 for (int x=0;x<9;x++){
-                    if (celdas[y][x].mouse_hit(&e)){
+                    if (celdas[y][x].point_hit(e.motion.x,e.motion.y)){
                         celdas[y][x].poligono1[0].color=SDL_Color{0,100,0,255};
                         celdas[y][x].poligono1[1].color=SDL_Color{0,100,0,255};
                         celdas[y][x].poligono1[2].color=SDL_Color{0,100,0,255};
                         seleciono = &celdas[y][x];
+                    }else if (celdas[y][x].point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                        celdas[y][x].poligono1[0].color = SDL_Color{ 100,0,0,255 };
+                        celdas[y][x].poligono1[1].color = SDL_Color{ 100,0,0,255 };
+                        celdas[y][x].poligono1[2].color = SDL_Color{ 100,0,0,255 };
+
                     }
+                    
                     else {
                             celdas[y][x].poligono1[0].color=col;
                             celdas[y][x].poligono1[1].color=col;
                             celdas[y][x].poligono1[2].color=col;
                         }
                     }
-                }
+            }
+            
         }
         
         
@@ -176,6 +192,7 @@ int main(int argc, char* argv[]) {
     }
     SDL_DestroyTexture(tex);
     SDL_DestroyTexture(pepe_text);
+    SDL_DestroyTexture(awita);
     SDL_FreeSurface(pepe);
     //SDL_DestroyRenderer(texrenderer);
     SDL_FreeSurface(texture_surface);

@@ -228,10 +228,10 @@ void terreno::draw(SDL_Renderer* renderizador,SDL_Texture* tex){
     SDL_RenderGeometry(renderizador, tex, this->poligono2, 3, this->indice, 3);
     SDL_RenderDrawLines(renderizador, this->celda, 6);
 }
-bool terreno::mouse_hit(SDL_Event* e) {
-    int yoff  = e->motion.y - this->poligono1[0].position.y ;
-    bool iny = e->motion.y > this->poligono1[0].position.y && e->motion.y < (this->poligono1[0].position.y + (int)(this->tam/2));
-    bool inx = e->motion.x > (this->poligono1[0].position.x-yoff) && e->motion.x < (this->poligono1[0].position.x - yoff)+this->tam;
+bool terreno::point_hit(int x,int y) {
+    int yoff  = y - this->poligono1[0].position.y ;
+    bool iny = y > this->poligono1[0].position.y && y < (this->poligono1[0].position.y + (int)(this->tam/2));
+    bool inx = x > (this->poligono1[0].position.x-yoff) && x < (this->poligono1[0].position.x - yoff)+this->tam;
     bool in = iny && inx;
     return in ;
 }

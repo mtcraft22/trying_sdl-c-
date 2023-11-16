@@ -28,7 +28,7 @@ class terreno{
         void set_ayacent(enum sides side, terreno* terreno);
         void move (enum cell_vertex side,float addx,float addy);
         void draw(SDL_Renderer *renderizador,SDL_Texture* tex);
-        bool mouse_hit(SDL_Event * e);
+        bool point_hit(int x, int y);
 };
 
 #endif
