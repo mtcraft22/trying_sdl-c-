@@ -13,7 +13,7 @@
 #include <circle.hpp>
 #include <vector>
 using namespace std;
-
+int mx, my;
 int main(int argc, char* argv[]) {
     if (!init_sdl()) {
         cout << SDL_GetError();
@@ -159,46 +159,46 @@ int main(int argc, char* argv[]) {
                 }
             }
             
-            
+            mx = e.motion.x;
+            my = e.motion.y;
         
-            for (int y=0;y<9;y++){
-                for (int x=0;x<9;x++){
-                    if (celdas[y][x].point_hit(e.motion.x,e.motion.y)){
-                        celdas[y][x].poligono1[0].color=SDL_Color{0,100,0,255};
-                        celdas[y][x].poligono1[1].color=SDL_Color{0,100,0,255};
-                        celdas[y][x].poligono1[2].color=SDL_Color{0,100,0,255};
-                        seleciono = &celdas[y][x];
-                    }else if (celdas[y][x].point_hit(bolita.getcenterx(), bolita.getcentery())) {
-                        celdas[y][x].poligono1[0].color=SDL_Color{100,0,0,255};
-                        celdas[y][x].poligono1[1].color=SDL_Color{100,0,0,255};
-                        celdas[y][x].poligono1[2].color=SDL_Color{100,0,0,255};
-                        if (celdas[y][x].poligono1[0].position.y < celdas[y][x].poligono1[1].position.y ){
-                            bolita.setx(bolita.getcenterx() + 4);
-                            bolita.sety(bolita.getcentery() + 1);
-                        }else if (celdas[y][x].poligono1[0].position.y > celdas[y][x].poligono1[1].position.y) {
-                            bolita.setx(bolita.getcenterx() - 4);
-                            bolita.sety(bolita.getcentery() + 1);
-                        }
-                        else if ((celdas[y][x].poligono1[1].position.y - celdas[y][x].poligono2[0].position.y > 15) || (celdas[y][x].poligono1[1].position.y - celdas[y][x].poligono2[1].position.y > 15)) {
-                            bolita.setx(bolita.getcenterx() + 1);
-                            bolita.sety(bolita.getcentery() + 4);
-                        }
-                        else if ((celdas[y][x].poligono1[1].position.y < celdas[y][x].poligono2[0].position.y) || (celdas[y][x].poligono1[1].position.y < celdas[y][x].poligono2[1].position.y )) {
-                            bolita.setx(bolita.getcenterx() + 1);
-                            bolita.sety(bolita.getcentery() - 4);
-                        }
-                    }
-                    
-                    else {
-                            celdas[y][x].poligono1[0].color=col;
-                            celdas[y][x].poligono1[1].color=col;
-                            celdas[y][x].poligono1[2].color=col;
-                        }
-                    }
-            }
+           
             
         }
-        
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                if (celdas[y][x].point_hit(mx, my)) {
+                    celdas[y][x].poligono1[0].color = SDL_Color{ 0,100,0,255 };
+                    celdas[y][x].poligono1[1].color = SDL_Color{ 0,100,0,255 };
+                    celdas[y][x].poligono1[2].color = SDL_Color{ 0,100,0,255 };
+                    seleciono = &celdas[y][x];
+                }
+                else if (celdas[y][x].point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                    celdas[y][x].poligono1[0].color = SDL_Color{ 100,0,0,255 };
+                    celdas[y][x].poligono1[1].color = SDL_Color{ 100,0,0,255 };
+                    celdas[y][x].poligono1[2].color = SDL_Color{ 100,0,0,255 };
+                    if (celdas[y][x].poligono1[0].position.y < celdas[y][x].poligono1[1].position.y) {
+                        bolita.setx(bolita.getcenterx() + 4);
+                        bolita.sety(bolita.getcentery() + 1);
+                    }
+                    else if (celdas[y][x].poligono1[0].position.y > celdas[y][x].poligono1[1].position.y) {
+                        bolita.setx(bolita.getcenterx() - 4);
+                        bolita.sety(bolita.getcentery() + 1);
+                    }
+                    else if ((celdas[y][x].poligono1[1].position.y - celdas[y][x].poligono2[0].position.y > 15) || (celdas[y][x].poligono1[1].position.y - celdas[y][x].poligono2[1].position.y > 15)) {
+                        bolita.setx(bolita.getcenterx() + 1);
+                        bolita.sety(bolita.getcentery() + 4);
+                    }
+
+                }
+
+                else {
+                    celdas[y][x].poligono1[0].color = col;
+                    celdas[y][x].poligono1[1].color = col;
+                    celdas[y][x].poligono1[2].color = col;
+                }
+            }
+        }
         
            
         
