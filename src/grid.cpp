@@ -33,8 +33,11 @@ terreno::terreno(int tam,SDL_Point init,SDL_Color color){
     this->poligono1[0]={(float)init.x,(float)init.y,color,0.0f,0.0f};
     this->poligono1[1]={(float)init.x+tam,(float)init.y,color,1.0f,0.0f};
     this->poligono1[2]={(float)init.x-((float)tam/2)+tam,(float)init.y+((float)tam/2),color,1.0f,1.0f};
+    
     this->poligono2[0]={(float)init.x-(float)tam/2,(float)init.y+(float)tam/2,color,0.0f,1.0f};
+    
     this->poligono2[1]={(float)init.x,(float)init.y,color,0.0f,0.0f};
+    
     this->poligono2[2]={(float)init.x-(float)tam/2+tam,(float)init.y+(float)tam/2,color,1.0f,1.0f};
 }
 
@@ -229,9 +232,25 @@ void terreno::draw(SDL_Renderer* renderizador,SDL_Texture* tex){
     SDL_RenderDrawLines(renderizador, this->celda, 6);
 }
 bool terreno::point_hit(int x,int y) {
-    int yoff  = y - this->poligono1[0].position.y ;
-    bool iny = y > this->poligono1[0].position.y && y < (this->poligono1[0].position.y + (int)(this->tam/2));
-    bool inx = x > (this->poligono1[0].position.x-yoff) && x < (this->poligono1[0].position.x - yoff)+this->tam;
-    bool in = iny && inx;
-    return in ;
+
+    
+    double global_area_1 = abs((this->poligono1[1].position.x- this->poligono1[0].position.x)* (this->poligono1[2].position.y - this->poligono1[0].position.y)- (this->poligono1[2].position.x - this->poligono1[0].position.x) * (this->poligono1[1].position.y - this->poligono1[0].position.y));
+
+    double point_area_1 = abs((this->poligono1[0].position.x - x) * (this->poligono1[1].position.y -y) - (this->poligono1[1].position.x - x) * (this->poligono1[0].position.y-y));
+    double point_area_2 = abs((this->poligono1[1].position.x - x) * (this->poligono1[2].position.y-y) - (this->poligono1[2].position.x - x) * (this->poligono1[1].position.y-y));
+    double point_area_3 = abs((this->poligono1[2].position.x - x) * (this->poligono1[0].position.y-y) - (this->poligono1[0].position.x - x) * (this->poligono1[2].position.y-y));
+
+
+    double global_area_2 = abs((this->poligono2[1].position.x - this->poligono2[0].position.x) * (this->poligono2[2].position.y - this->poligono2[0].position.y) - (this->poligono2[2].position.x - this->poligono2[0].position.x) * (this->poligono2[1].position.y - this->poligono2[0].position.y));
+
+    double point_area_12 = abs((this->poligono2[0].position.x - x) * (this->poligono2[1].position.y - y) - (this->poligono2[1].position.x - x) * (this->poligono2[0].position.y - y));
+    double point_area_22 = abs((this->poligono2[1].position.x - x) * (this->poligono2[2].position.y - y) - (this->poligono2[2].position.x - x) * (this->poligono2[1].position.y - y));
+    double point_area_32 = abs((this->poligono2[2].position.x - x) * (this->poligono2[0].position.y - y) - (this->poligono2[0].position.x - x) * (this->poligono2[2].position.y - y));
+
+
+
+    return ((point_area_1 + point_area_2 + point_area_3) == global_area_1) || ((point_area_12 + point_area_22 + point_area_32) == global_area_2);
+
+   
+    
 }

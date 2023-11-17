@@ -174,6 +174,18 @@ int main(int argc, char* argv[]) {
                         celdas[y][x].poligono1[2].color=SDL_Color{100,0,0,255};
                         if (celdas[y][x].poligono1[0].position.y < celdas[y][x].poligono1[1].position.y ){
                             bolita.setx(bolita.getcenterx() + 4);
+                            bolita.sety(bolita.getcentery() + 1);
+                        }else if (celdas[y][x].poligono1[0].position.y > celdas[y][x].poligono1[1].position.y) {
+                            bolita.setx(bolita.getcenterx() - 4);
+                            bolita.sety(bolita.getcentery() + 1);
+                        }
+                        else if ((celdas[y][x].poligono1[1].position.y - celdas[y][x].poligono2[0].position.y > 15) || (celdas[y][x].poligono1[1].position.y - celdas[y][x].poligono2[1].position.y > 15)) {
+                            bolita.setx(bolita.getcenterx() + 1);
+                            bolita.sety(bolita.getcentery() + 4);
+                        }
+                        else if ((celdas[y][x].poligono1[1].position.y < celdas[y][x].poligono2[0].position.y) || (celdas[y][x].poligono1[1].position.y < celdas[y][x].poligono2[1].position.y )) {
+                            bolita.setx(bolita.getcenterx() + 1);
+                            bolita.sety(bolita.getcentery() - 4);
                         }
                     }
                     

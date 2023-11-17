@@ -24,16 +24,17 @@ void Circle::DrawCircle(SDL_Renderer *renderer)
 
    while (x >= y)
    {
+      
       SDL_RenderDrawPoint(renderer, this->x + x, this->y - y);
-      //SDL_RenderDrawPoint(renderer, this->x + x, this->y + y);
-      //SDL_RenderDrawPoint(renderer, this->x - x, this->y - y);
+      SDL_RenderDrawPoint(renderer, this->x + x, this->y + y);
+      SDL_RenderDrawPoint(renderer, this->x - x, this->y - y);
       SDL_RenderDrawPoint(renderer, this->x - x, this->y + y);
-     // SDL_RenderDrawPoint(renderer, this->x + y, this->y - x);
-     // SDL_RenderDrawPoint(renderer, this->x + y, this->y + x);
-     // SDL_RenderDrawPoint(renderer, this->x - y, this->y - x);
-     // SDL_RenderDrawPoint(renderer, this->x - y, this->y + x);
-      
-      
+
+      SDL_RenderDrawPoint(renderer, this->x + y, this->y - x);
+      SDL_RenderDrawPoint(renderer, this->x + y, this->y + x);
+      SDL_RenderDrawPoint(renderer, this->x - y, this->y - x);
+      SDL_RenderDrawPoint(renderer, this->x - y, this->y + x);
+     
 
 
 
