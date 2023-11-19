@@ -148,7 +148,28 @@ int main(int argc, char* argv[]) {
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT) { quit = true; }
-            
+            else if (e.type == SDL_MOUSEBUTTONDOWN){
+                switch (e.button.button) {
+                    case SDL_BUTTON_LEFT:
+                        for (vector<terreno *> i: celdas ){
+                            for (terreno *ter: i){
+                                if (ter->point_hit(e.motion.x,e.motion.y)) {
+                    
+                                    ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
+                                    ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
+                                    ter->poligono1[2].color = SDL_Color{ 0,100,0,255 };
+                                    seleciono = ter;
+                                }
+                            }
+                        }
+                    break;
+                    default:
+                        break;
+
+                    
+                }
+                
+            }
             else if (e.type==SDL_MOUSEWHEEL) {
                 
                 if (e.wheel.y < 0){
@@ -184,15 +205,8 @@ int main(int argc, char* argv[]) {
         
         for (vector<terreno *> i: celdas ){
             for (terreno *ter: i){
-                if (ter->point_hit(mx, my)) {
-                    
-                    ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
-                    ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
-                    ter->poligono1[2].color = SDL_Color{ 0,100,0,255 };
-                    seleciono = ter;
-                    
-                }
-                else if (ter->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+               
+                if (ter->point_hit(bolita.getcenterx(), bolita.getcentery())) {
                     ter->poligono1[0].color = SDL_Color{ 100,0,0,255 };
                     ter->poligono1[1].color = SDL_Color{ 100,0,0,255 };
                     ter->poligono1[2].color = SDL_Color{ 100,0,0,255 };
