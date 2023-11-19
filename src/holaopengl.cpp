@@ -53,9 +53,10 @@ int main(int argc, char* argv[]) {
     root = { 550,100 };
 
 
-    for (int y = 0; y < 25; y++) {
+    for (int y = 0; y < 7; y++) {
          
-        for (int x = 0; x < 25; x++) {
+        for (int x = 0; x < 4; x++) {
+            
 
             terreno * cel = new terreno(60, root, col);
         
