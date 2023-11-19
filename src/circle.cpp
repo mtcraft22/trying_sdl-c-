@@ -35,7 +35,7 @@ void Circle::DrawCircle(SDL_Renderer *renderer)
       SDL_RenderDrawPoint(renderer, this->x - y, this->y - x);
       SDL_RenderDrawPoint(renderer, this->x - y, this->y + x);
      
-
+      
 
 
       if (error <= 0)
