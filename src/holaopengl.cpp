@@ -53,9 +53,9 @@ int main(int argc, char* argv[]) {
     root = { 550,100 };
 
 
-    for (int y = 0; y < 7; y++) {
+    for (int y = 0; y < 15; y++) {
          
-        for (int x = 0; x < 4; x++) {
+        for (int x = 0; x < 15; x++) {
             
 
             terreno * cel = new terreno(60, root, col);
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
             if (y - 1 >= 0) {
                 celdas[y][x]->set_ayacent(TOP, celdas[y-1][x]);
             }
-            cout << x <<" "<< y << endl ;   
+              
         }
     }
     
@@ -154,10 +154,7 @@ int main(int argc, char* argv[]) {
                         for (vector<terreno *> i: celdas ){
                             for (terreno *ter: i){
                                 if (ter->point_hit(e.motion.x,e.motion.y)) {
-                    
-                                    ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
-                                    ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
-                                    ter->poligono1[2].color = SDL_Color{ 0,100,0,255 };
+                
                                     seleciono = ter;
                                 }
                             }
@@ -206,6 +203,12 @@ int main(int argc, char* argv[]) {
         for (vector<terreno *> i: celdas ){
             for (terreno *ter: i){
                
+
+                    seleciono->poligono1[0].color = SDL_Color{ 0,100,0,255 };
+                    seleciono->poligono1[1].color = SDL_Color{ 0,100,0,255 };
+                    seleciono->poligono1[2].color = SDL_Color{ 0,100,0,255 };
+
+
                 if (ter->point_hit(bolita.getcenterx(), bolita.getcentery())) {
                     ter->poligono1[0].color = SDL_Color{ 100,0,0,255 };
                     ter->poligono1[1].color = SDL_Color{ 100,0,0,255 };
@@ -228,8 +231,11 @@ int main(int argc, char* argv[]) {
                     ter->poligono1[1].color = col;
                     ter->poligono1[2].color = col;
                 }
+                
             }
+            
         }
+        
     }
     for (vector<terreno *> i: celdas ){
         for (terreno *ter: i){
