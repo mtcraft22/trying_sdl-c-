@@ -1,18 +1,15 @@
-#include "SDL_events.h"
-#include "SDL_mouse.h"
-#include "SDL_pixels.h"
-#include <bits/fs_fwd.h>
+
 #include <exception>
 #include <iostream>
 #include <cmath>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
 
-#include <ostream>
+
 #include <setup.hpp>
 #include <grid.hpp>
 #include <circle.hpp>
-#include <vector>
 using namespace std;
 int mx, my;
 int main(int argc, char* argv[]) {
@@ -27,6 +24,8 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     SDL_Renderer* renderizador = SDL_CreateRenderer(window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    SDL_Surface* texture_awita = IMG_Load("./resources/awita.png");
+    SDL_Texture* awita = SDL_CreateTextureFromSurface(renderizador, texture_awita);
 
     SDL_Surface* texture_surface = IMG_Load("./resources/bueno.png");
     SDL_Texture* tex = SDL_CreateTextureFromSurface(renderizador, texture_surface);
@@ -53,20 +52,20 @@ int main(int argc, char* argv[]) {
     root = { 550,100 };
 
 
-    for (int y = 0; y < 15; y++) {
+    for (int y = 0; y < 25; y++) {
          
-        for (int x = 0; x < 15; x++) {
+        for (int x = 0; x < 25; x++) {
             
 
-            terreno * cel = new terreno(60, root, col);
+            terreno * cel = new terreno(40, root, col);
         
             celdarow.push_back(cel);
-            root.x += 60;
+            root.x += 40;
         }
         celdas.push_back(celdarow);
         celdarow.clear();
-        root.y += 30;
-        root.x = 550 - (30 * (y + 1));
+        root.y += 20;
+        root.x = 550 - (20 * (y + 1));
     }
     
     for (int y= 0; y<= celdas.size()-1; y++){
@@ -121,16 +120,11 @@ int main(int argc, char* argv[]) {
         
         SDL_RenderClear(renderizador);
         SDL_SetRenderDrawColor(renderizador, r, g, b, a);
-        
         //SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
-        
-     
-        
-        
-        
         for (vector<terreno *> i: celdas ){
             for (terreno *ter2: i){
-                ter2->draw(renderizador, tex);
+                
+                    ter2->draw(renderizador, tex);
                 
             }
         }
@@ -148,25 +142,8 @@ int main(int argc, char* argv[]) {
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT) { quit = true; }
-            else if (e.type == SDL_MOUSEBUTTONDOWN){
-                switch (e.button.button) {
-                    case SDL_BUTTON_LEFT:
-                        for (vector<terreno *> i: celdas ){
-                            for (terreno *ter: i){
-                                if (ter->point_hit(e.motion.x,e.motion.y)) {
-                
-                                    seleciono = ter;
-                                }
-                            }
-                        }
-                    break;
-                    default:
-                        break;
-
-                    
-                }
-                
-            }
+            
+            
             else if (e.type==SDL_MOUSEWHEEL) {
                 
                 if (e.wheel.y < 0){
@@ -203,13 +180,12 @@ int main(int argc, char* argv[]) {
         for (vector<terreno *> i: celdas ){
             for (terreno *ter: i){
                
-
-                    seleciono->poligono1[0].color = SDL_Color{ 0,100,0,255 };
-                    seleciono->poligono1[1].color = SDL_Color{ 0,100,0,255 };
-                    seleciono->poligono1[2].color = SDL_Color{ 0,100,0,255 };
-
-
-                if (ter->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                if (ter->point_hit(mx, my)) {
+                    ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
+                    ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
+                    ter->poligono1[2].color = SDL_Color{ 0,100,0,255 };
+                    seleciono = ter;
+                }else if (ter->point_hit(bolita.getcenterx(), bolita.getcentery())) {
                     ter->poligono1[0].color = SDL_Color{ 100,0,0,255 };
                     ter->poligono1[1].color = SDL_Color{ 100,0,0,255 };
                     ter->poligono1[2].color = SDL_Color{ 100,0,0,255 };
@@ -237,7 +213,7 @@ int main(int argc, char* argv[]) {
         }
         
     }
-    for (vector<terreno *> i: celdas ){
+    for (vector<terreno *> i: celdas ){  //TODO: preguntar a javi
         for (terreno *ter: i){
             delete ter;
     }}
