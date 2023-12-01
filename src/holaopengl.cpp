@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
         //SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
         for (vector<terreno *> i: celdas ){
             for (terreno *ter2: i){
-                
+                    
                     ter2->draw(renderizador, tex);
                 
             }
@@ -131,7 +131,7 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
         
         bolita.DrawCircle(renderizador);
-        for (int i = bolita.getradious()-1; i>0; i--){
+        for (int i = bolita.getradious()-1; i>=0; i--){
             Circle bolita2 = Circle(bolita.getcenterx(),bolita.getcentery(),i);
             bolita2.DrawCircle(renderizador);
         }
@@ -143,7 +143,52 @@ int main(int argc, char* argv[]) {
         {
             if (e.type == SDL_QUIT) { quit = true; }
             
-            
+            else if (e.type == SDL_KEYDOWN) {
+
+                switch (e.key.keysym.sym)
+                {
+                    case SDLK_d:
+                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                            bolita.sety(bolita.getcenterx() + 1);
+                        }
+                        seleciono->move(TOP_RIGHT, 1, 0);
+                        seleciono->move(TOP_LEFT, 1, 0);
+                        seleciono->move(BOTTOM_LEFT, 1, 0);
+                        seleciono->move(BOTTOM_RIGHT, 1, 0);
+                        break;
+                    case SDLK_a:
+                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                            bolita.sety(bolita.getcenterx() - 1);
+                        }
+                        seleciono->move(TOP_RIGHT, -1, 0);
+                        seleciono->move(TOP_LEFT, -1, 0);
+                        seleciono->move(BOTTOM_LEFT, -1, 0);
+                        seleciono->move(BOTTOM_RIGHT, -1, 0);
+                        break;
+                    case SDLK_s:
+                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                           
+                            bolita.sety(bolita.getcentery() + 1);
+                        }
+                        seleciono->move(TOP_RIGHT, 0, 1);
+                        seleciono->move(TOP_LEFT, 0, 1);
+                        seleciono->move(BOTTOM_LEFT, 0, 1);
+                        seleciono->move(BOTTOM_RIGHT, 0, 1);
+                        break;
+                    case SDLK_w:
+                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                            
+                            bolita.sety(bolita.getcentery() - 1);
+                        }
+                        seleciono->move(TOP_RIGHT, 0, -1);
+                        seleciono->move(TOP_LEFT, 0, -1);
+                        seleciono->move(BOTTOM_LEFT, 0, -1);
+                        seleciono->move(BOTTOM_RIGHT, 0, -1);
+                        break;
+                    default:
+                        break;
+                }
+            }
             else if (e.type==SDL_MOUSEWHEEL) {
                 
                 if (e.wheel.y < 0){
@@ -166,6 +211,7 @@ int main(int argc, char* argv[]) {
                     seleciono->move(BOTTOM_RIGHT, 0, -1);
                     break;
                 }
+                
                         
                  
             }
@@ -184,11 +230,17 @@ int main(int argc, char* argv[]) {
                     ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
                     ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
                     ter->poligono1[2].color = SDL_Color{ 0,100,0,255 };
+                    ter->poligono2[0].color = SDL_Color{ 0,100,0,255 };
+                    ter->poligono2[1].color = SDL_Color{ 0,100,0,255 };
+                    ter->poligono2[2].color = SDL_Color{ 0,100,0,255 };
                     seleciono = ter;
                 }else if (ter->point_hit(bolita.getcenterx(), bolita.getcentery())) {
                     ter->poligono1[0].color = SDL_Color{ 100,0,0,255 };
                     ter->poligono1[1].color = SDL_Color{ 100,0,0,255 };
                     ter->poligono1[2].color = SDL_Color{ 100,0,0,255 };
+                    ter->poligono2[0].color = SDL_Color{ 100,0,0,255 };
+                    ter->poligono2[1].color = SDL_Color{ 100,0,0,255 };
+                    ter->poligono2[2].color = SDL_Color{ 100,0,0,255 };
                     if (ter->poligono1[0].position.y < ter->poligono1[1].position.y) {
                         bolita.setx(bolita.getcenterx() + 4);
                         bolita.sety(bolita.getcentery() + 1);
@@ -206,6 +258,9 @@ int main(int argc, char* argv[]) {
                     ter->poligono1[0].color = col;
                     ter->poligono1[1].color = col;
                     ter->poligono1[2].color = col;
+                    ter->poligono2[0].color = col;
+                    ter->poligono2[1].color = col;
+                    ter->poligono2[2].color = col;
                 }
                 
             }
