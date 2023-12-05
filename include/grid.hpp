@@ -1,11 +1,7 @@
 
-#include "SDL_events.h"
+
 #include <SDL.h>
-#include <iostream>
-#include <optional>
-#include <string>
-#include <map>
-#include <vector>
+
 #ifndef grid
 #define grid
 enum sides {LEFT,RIGHT,TOP,BOTTOM};

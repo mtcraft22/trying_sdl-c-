@@ -1,15 +1,14 @@
-
-#include <exception>
+#include "SDL_blendmode.h"
 #include <iostream>
-#include <cmath>
 #include <SDL.h>
 #include <SDL_image.h>
-#include <vector>
 
-
+#include <chunck.hpp>   
 #include <setup.hpp>
-#include <grid.hpp>
 #include <circle.hpp>
+
+
+
 using namespace std;
 int mx, my;
 int main(int argc, char* argv[]) {
@@ -41,50 +40,14 @@ int main(int argc, char* argv[]) {
 
     SDL_Color col{ 0xff,0xff,0xff,0xff };
 
-    SDL_Point root;
-    root = { 0,0 };
+    Chunck* trozo = new Chunck(30,10,10, 512,300,&col);
+    Chunck* trozo2 = new Chunck(30,10,10, 812,300,&col);
     
 
 
-    vector<vector<terreno*>> celdas;
-    vector<terreno*> celdarow ;
-
-    root = { 550,100 };
 
 
-    for (int y = 0; y < 25; y++) {
-         
-        for (int x = 0; x < 25; x++) {
-            
-
-            terreno * cel = new terreno(40, root, col);
-        
-            celdarow.push_back(cel);
-            root.x += 40;
-        }
-        celdas.push_back(celdarow);
-        celdarow.clear();
-        root.y += 20;
-        root.x = 550 - (20 * (y + 1));
-    }
     
-    for (int y= 0; y<= celdas.size()-1; y++){
-        for (int x= 0; x<= celdas.at(y).size()-1; x++){
-            if (x+1 <= celdas.at(y).size()-1){
-                celdas[y][x]->set_ayacent(RIGHT, celdas[y][x+1]);
-            }
-            if (y+1 <= celdas.size()-1){
-                celdas[y][x]->set_ayacent(BOTTOM, celdas[y+1][x]);
-            }
-            if (x - 1 >= 0) { 
-                celdas[y][x]->set_ayacent(LEFT, celdas[y][x - 1]);
-            }
-            if (y - 1 >= 0) {
-                celdas[y][x]->set_ayacent(TOP, celdas[y-1][x]);
-            }
-              
-        }
-    }
     
     SDL_Event e;
     bool quit = false;
@@ -113,21 +76,16 @@ int main(int argc, char* argv[]) {
  
     float* grid_colision_offsets[2] = { 0,0 };
     
-    terreno * seleciono = celdas[0][0];
+    terreno * seleciono = trozo->gridgroup.at(1).at(1);
     Circle bolita = Circle(550+(30*5), 100+(15*5), 10);
 
     while (!quit) {
         
         SDL_RenderClear(renderizador);
         SDL_SetRenderDrawColor(renderizador, r, g, b, a);
-        //SDL_SetRenderDrawBlendMode(renderizador,SDL_BLENDMODE_ADD);
-        for (vector<terreno *> i: celdas ){
-            for (terreno *ter2: i){
-                    
-                    ter2->draw(renderizador, tex);
-                
-            }
-        }
+        //SDL_SetRenderDrawBlendMode(renderizador,SDL_BlendMode::SDL_BLENDMODE_MOD);
+        trozo->draw_chunk(renderizador, tex);
+        trozo2->draw_chunk(renderizador, awita);
         SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
         
         bolita.DrawCircle(renderizador);
@@ -223,9 +181,9 @@ int main(int argc, char* argv[]) {
             
         }
         
-        for (vector<terreno *> i: celdas ){
+        for (vector<terreno *> i: trozo->gridgroup ){
             for (terreno *ter: i){
-               
+
                 if (ter->point_hit(mx, my)) {
                     ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
                     ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
@@ -268,11 +226,8 @@ int main(int argc, char* argv[]) {
         }
         
     }
-    for (vector<terreno *> i: celdas ){  //TODO: preguntar a javi
-        for (terreno *ter: i){
-            delete ter;
-    }}
-
+    
+    delete trozo;
     SDL_DestroyTexture(tex);
     SDL_DestroyTexture(pepe_text);
     

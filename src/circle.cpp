@@ -3,8 +3,6 @@
 #include <SDL_timer.h>
 #include <circle.hpp>
 
-#include <iostream>
-#include <ostream>
 
 
 Circle::Circle(int x,int y,int r){

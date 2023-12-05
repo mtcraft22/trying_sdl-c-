@@ -6,7 +6,7 @@ Include = -I../include -I/usr/include/SDL2
 CPPFLAGS= $(include) $(lib)
 COMPILER = g++
 
-all:setupsdl.o grid.o holaopengl.o circle.o
+all:setupsdl.o grid.o holaopengl.o circle.o chunck.o
 	$(COMPILER) -o ../release/terreno.out $(objects) $(lib)
 setupsdl.o:../src/setupsdl.cpp ../include/setup.hpp
 	$(COMPILER) -c ../src/setupsdl.cpp $(Include) 
@@ -18,5 +18,8 @@ holaopengl.o:../src/holaopengl.cpp ../include/grid.hpp \
 circle.o:../src/circle.cpp ../include/grid.hpp \
 		   ../include/setup.hpp
 	$(COMPILER) -c ../src/circle.cpp $(Include)
+chunck.o:../src/chunck.cpp ../include/chunck.hpp \
+		../include/grid.hpp
+	$(COMPILER) -c ../src/chunck.cpp $(Include)
 clear:
 	rm $(objects)

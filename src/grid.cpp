@@ -1,9 +1,9 @@
-#include "SDL_events.h"
+
 #include <SDL.h> 
 #include <cstddef>
-#include <iostream>
 #include <grid.hpp>
-#include <string>
+
+#include <stdexcept>
 
 using namespace std;
 //constructor de terreno
