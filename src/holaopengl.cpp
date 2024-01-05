@@ -1,4 +1,8 @@
-#include "SDL_blendmode.h"
+
+#include "SDL_pixels.h"
+#include "SDL_render.h"
+#include "SDL_surface.h"
+#include <cstddef>
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -10,6 +14,9 @@
 
 
 using namespace std;
+
+#define sdl_ticks_4_frame 1000/30.0
+
 int mx, my;
 int main(int argc, char* argv[]) {
     if (!init_sdl()) {
@@ -24,10 +31,12 @@ int main(int argc, char* argv[]) {
     }
     SDL_Renderer* renderizador = SDL_CreateRenderer(window, 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     SDL_Surface* texture_awita = IMG_Load("./resources/awita.png");
+    
     SDL_Texture* awita = SDL_CreateTextureFromSurface(renderizador, texture_awita);
+    SDL_Texture* tex = IMG_LoadTexture (renderizador, "./resources/bueno.png");
+   
 
-    SDL_Surface* texture_surface = IMG_Load("./resources/bueno.png");
-    SDL_Texture* tex = SDL_CreateTextureFromSurface(renderizador, texture_surface);
+    
     //cargamos awita
    
     //cargamos al personaje principal
@@ -40,10 +49,17 @@ int main(int argc, char* argv[]) {
 
     SDL_Color col{ 0xff,0xff,0xff,0xff };
 
-    Chunck* trozo = new Chunck(30,10,10, 512,300,&col);
-    Chunck* trozo2 = new Chunck(30,10,10, 812,300,&col);
+    Chunck* trozo = new Chunck(40,10,10, 300,100,&col);
+   
     
-
+    SDL_Vertex vertical_grid[4] = {
+        {300,100,col,0.0f,0.0f},
+        {340,140,col,1.0f,0.0f},
+        {340,120,col,1.0f,1.0f},
+        /*{0,0,col,0.0f,0.0f},
+        {0,0,col,0.0f,0.0f},
+        {0,0,col,0.0f,0.0f},*/
+    };
 
 
 
@@ -62,6 +78,8 @@ int main(int argc, char* argv[]) {
         {250,200,col,1.0f,0.0f}
 
     };
+
+   
     int indices_pepe[4] = { 0,1,2 };
     SDL_Rect rec = { 20,20,50,50 };
     Circle circulo = Circle(450, 200, 100);
@@ -79,126 +97,126 @@ int main(int argc, char* argv[]) {
     terreno * seleciono = trozo->gridgroup.at(1).at(1);
     Circle bolita = Circle(550+(30*5), 100+(15*5), 10);
 
+    int start = SDL_GetTicks();
+    int end = SDL_GetTicks();
+    double delta = 0.0;
+
     while (!quit) {
-        
-        SDL_RenderClear(renderizador);
-        SDL_SetRenderDrawColor(renderizador, r, g, b, a);
-        //SDL_SetRenderDrawBlendMode(renderizador,SDL_BlendMode::SDL_BLENDMODE_MOD);
-        trozo->draw_chunk(renderizador, tex);
-        trozo2->draw_chunk(renderizador, awita);
-        SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
-        
-        bolita.DrawCircle(renderizador);
-        for (int i = bolita.getradious()-1; i>=0; i--){
-            Circle bolita2 = Circle(bolita.getcenterx(),bolita.getcentery(),i);
-            bolita2.DrawCircle(renderizador);
-        }
 
-        SDL_RenderPresent(renderizador);
-        SDL_SetRenderDrawColor(renderizador,0,0,0,255);
-      
-        while (SDL_PollEvent(&e))
-        {
-            if (e.type == SDL_QUIT) { quit = true; }
-            
-            else if (e.type == SDL_KEYDOWN) {
-
-                switch (e.key.keysym.sym)
-                {
-                    case SDLK_d:
-                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
-                            bolita.sety(bolita.getcenterx() + 1);
+        start = SDL_GetTicks();
+        delta = start - end;
+        
+        if (delta>sdl_ticks_4_frame){
+            end = start;
+            cout << "frames: " << 1000/delta  << std::endl ;
+            SDL_RenderClear(renderizador);
+            SDL_SetRenderDrawColor(renderizador, r, g, b, a);
+            //SDL_SetRenderDrawBlendMode(renderizador,SDL_BlendMode::SDL_BLENDMODE_MOD);
+            SDL_RenderGeometry(renderizador,capa2_text, vertical_grid, 3, NULL, 3);
+            trozo->draw_chunk(renderizador, tex);
+            bolita.DrawCircle(renderizador);
+            SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
+            for (int i = bolita.getradious()-1; i>=0; i--){
+                Circle bolita2 = Circle(bolita.getcenterx(),bolita.getcentery(),i);
+                bolita2.DrawCircle(renderizador);
+            }
+            SDL_RenderPresent(renderizador);
+            SDL_SetRenderDrawColor(renderizador,0,0,0,255);
+            while (SDL_PollEvent(&e)){
+                if (e.type == SDL_QUIT) { 
+                    quit = true; 
+                }
+                else if (e.type == SDL_KEYDOWN) {
+                    switch (e.key.keysym.sym){
+                        case SDLK_d:
+                            if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                                bolita.sety(bolita.getcenterx() + 1);
+                            }
+                            seleciono->move(TOP_RIGHT, 1, 0);
+                            seleciono->move(TOP_LEFT, 1, 0);
+                            seleciono->move(BOTTOM_LEFT, 1, 0);
+                            seleciono->move(BOTTOM_RIGHT, 1, 0);
+                            break;
+                        case SDLK_a:
+                            if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                                bolita.sety(bolita.getcenterx() - 1);
+                            }
+                            seleciono->move(TOP_RIGHT, -1, 0);
+                            seleciono->move(TOP_LEFT, -1, 0);
+                            seleciono->move(BOTTOM_LEFT, -1, 0);
+                            seleciono->move(BOTTOM_RIGHT, -1, 0);
+                            break;
+                        case SDLK_s:
+                            if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                            
+                                bolita.sety(bolita.getcentery() + 1);
+                            }
+                            seleciono->move(TOP_RIGHT, 0, 1);
+                            seleciono->move(TOP_LEFT, 0, 1);
+                            seleciono->move(BOTTOM_LEFT, 0, 1);
+                            seleciono->move(BOTTOM_RIGHT, 0, 1);
+                            
+                            break;
+                        case SDLK_w:
+                            if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                                bolita.sety(bolita.getcentery() - 1);
+                            }
+                            seleciono->move(TOP_RIGHT, 0, -1);
+                            seleciono->move(TOP_LEFT, 0, -1);
+                            seleciono->move(BOTTOM_LEFT, 0, -1);
+                            seleciono->move(BOTTOM_RIGHT, 0, -1);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (e.type==SDL_MOUSEWHEEL) {
+                    if (e.wheel.y < 0) {
+                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())){
+                            bolita.sety(bolita.getcentery()+1);
                         }
-                        seleciono->move(TOP_RIGHT, 1, 0);
-                        seleciono->move(TOP_LEFT, 1, 0);
-                        seleciono->move(BOTTOM_LEFT, 1, 0);
-                        seleciono->move(BOTTOM_RIGHT, 1, 0);
-                        break;
-                    case SDLK_a:
-                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
-                            bolita.sety(bolita.getcenterx() - 1);
-                        }
-                        seleciono->move(TOP_RIGHT, -1, 0);
-                        seleciono->move(TOP_LEFT, -1, 0);
-                        seleciono->move(BOTTOM_LEFT, -1, 0);
-                        seleciono->move(BOTTOM_RIGHT, -1, 0);
-                        break;
-                    case SDLK_s:
-                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
-                           
-                            bolita.sety(bolita.getcentery() + 1);
-                        }
-                        seleciono->move(TOP_RIGHT, 0, 1);
+                        seleciono->move(TOP_RIGHT, 0,1);
                         seleciono->move(TOP_LEFT, 0, 1);
                         seleciono->move(BOTTOM_LEFT, 0, 1);
                         seleciono->move(BOTTOM_RIGHT, 0, 1);
-                        break;
-                    case SDLK_w:
-                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
-                            
-                            bolita.sety(bolita.getcentery() - 1);
+                       break;
+                    }else if (e.wheel.y >0){
+                        if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())){
+                            bolita.sety(bolita.getcentery()-1);
                         }
                         seleciono->move(TOP_RIGHT, 0, -1);
                         seleciono->move(TOP_LEFT, 0, -1);
                         seleciono->move(BOTTOM_LEFT, 0, -1);
                         seleciono->move(BOTTOM_RIGHT, 0, -1);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else if (e.type==SDL_MOUSEWHEEL) {
-                
-                if (e.wheel.y < 0){
-                    if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())){
-                        bolita.sety(bolita.getcentery()+1);
-                    }
-                    seleciono->move(TOP_RIGHT, 0,1);
-                    seleciono->move(TOP_LEFT, 0, 1);
-                    seleciono->move(BOTTOM_LEFT, 0, 1);
-                    seleciono->move(BOTTOM_RIGHT, 0, 1);
-                    
-                    break;
-                }else if (e.wheel.y >0){
-                    if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())){
-                        bolita.sety(bolita.getcentery()-1);
-                    }
-                    seleciono->move(TOP_RIGHT, 0, -1);
-                    seleciono->move(TOP_LEFT, 0, -1);
-                    seleciono->move(BOTTOM_LEFT, 0, -1);
-                    seleciono->move(BOTTOM_RIGHT, 0, -1);
-                    break;
-                }
-                
                         
-                 
+                        break;
+                    }
+                    
+                            
+                    
+                }
+                
+                mx = e.motion.x;
+                my = e.motion.y;
             }
-            
-            mx = e.motion.x;
-            my = e.motion.y;
-           
-           
-            
-        }
-        
-        for (vector<terreno *> i: trozo->gridgroup ){
-            for (terreno *ter: i){
-
-                if (ter->point_hit(mx, my)) {
-                    ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
-                    ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
-                    ter->poligono1[2].color = SDL_Color{ 0,100,0,255 };
-                    ter->poligono2[0].color = SDL_Color{ 0,100,0,255 };
-                    ter->poligono2[1].color = SDL_Color{ 0,100,0,255 };
-                    ter->poligono2[2].color = SDL_Color{ 0,100,0,255 };
-                    seleciono = ter;
-                }else if (ter->point_hit(bolita.getcenterx(), bolita.getcentery())) {
-                    ter->poligono1[0].color = SDL_Color{ 100,0,0,255 };
-                    ter->poligono1[1].color = SDL_Color{ 100,0,0,255 };
-                    ter->poligono1[2].color = SDL_Color{ 100,0,0,255 };
-                    ter->poligono2[0].color = SDL_Color{ 100,0,0,255 };
-                    ter->poligono2[1].color = SDL_Color{ 100,0,0,255 };
-                    ter->poligono2[2].color = SDL_Color{ 100,0,0,255 };
+            for (vector<terreno *> i: trozo->gridgroup ){
+                for (terreno *ter: i){
+                    if (ter->point_hit(mx, my)) {
+                        ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
+                        ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
+                        ter->poligono1[2].color = SDL_Color{ 0,100,0,255 };
+                        ter->poligono2[0].color = SDL_Color{ 0,100,0,255 };
+                        ter->poligono2[1].color = SDL_Color{ 0,100,0,255 };
+                        ter->poligono2[2].color = SDL_Color{ 0,100,0,255 };
+                        seleciono = ter;
+                    }
+                    else if (ter->point_hit(bolita.getcenterx(), bolita.getcentery())) {
+                        ter->poligono1[0].color = SDL_Color{ 100,0,0,255 };
+                        ter->poligono1[1].color = SDL_Color{ 100,0,0,255 };
+                        ter->poligono1[2].color = SDL_Color{ 100,0,0,255 };
+                        ter->poligono2[0].color = SDL_Color{ 100,0,0,255 };
+                        ter->poligono2[1].color = SDL_Color{ 100,0,0,255 };
+                        ter->poligono2[2].color = SDL_Color{ 100,0,0,255 };
                     if (ter->poligono1[0].position.y < ter->poligono1[1].position.y) {
                         bolita.setx(bolita.getcenterx() + 4);
                         bolita.sety(bolita.getcentery() + 1);
@@ -211,20 +229,23 @@ int main(int argc, char* argv[]) {
                         bolita.setx(bolita.getcenterx() + 1);
                         bolita.sety(bolita.getcentery() + 4);
                     }
-                }
-                else {
-                    ter->poligono1[0].color = col;
-                    ter->poligono1[1].color = col;
-                    ter->poligono1[2].color = col;
-                    ter->poligono2[0].color = col;
-                    ter->poligono2[1].color = col;
-                    ter->poligono2[2].color = col;
-                }
+                    }
+                    else 
+                    {
+                        ter->poligono1[0].color = col;
+                        ter->poligono1[1].color = col;
+                        ter->poligono1[2].color = col;
+                        ter->poligono2[0].color = col;
+                        ter->poligono2[1].color = col;
+                        ter->poligono2[2].color = col;
+                    }
                 
+                }
+
             }
-            
+        }else{
+            SDL_Delay(floor(sdl_ticks_4_frame-delta));
         }
-        
     }
     
     delete trozo;
@@ -233,7 +254,7 @@ int main(int argc, char* argv[]) {
     
     SDL_FreeSurface(pepe);
     //SDL_DestroyRenderer(texrenderer);
-    SDL_FreeSurface(texture_surface);
+    
     SDL_DestroyRenderer(renderizador);
     SDL_DestroyWindow( window );
     //Quit SDL subsystems

@@ -1,13 +1,9 @@
 #pragma once
 
-#include "SDL_rect.h"
-#include "SDL_render.h"
-#include <iostream>
 #include <string>
-
 #include <SDL.h>
-
 #include <circle.hpp>
+
 
 using namespace std;
 
