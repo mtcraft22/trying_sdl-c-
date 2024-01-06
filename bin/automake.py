@@ -5,6 +5,10 @@ import os
 output = []
 
 if (len(sys.argv[1])>=2):
+    dir_prex=""
+
+    dir_prex="/".join(sys.argv[0].split("/")[:-1])
+    print(f"[LOG] make output directori: {dir_prex}/makefile")
     with open(sys.argv[1],"r") as data:
         nolose = json.loads(data.read())
     print(f"[LOG]: Detecting objects in: {os.curdir}")
@@ -44,7 +48,20 @@ if (len(sys.argv[1])>=2):
     output.append("clear:\n")
     output.append("\trm -r $(objects)\n")
     print(f"[LOG]: created rule for cleaning bin files")
+    current = os.curdir
+    if (len(dir_prex)>1):
+        os.chdir(dir_prex)
+        print(f"[LOG] Entry in : {dir_prex}")
+
+    load = 0
     with open("makefile","w") as target:
+
         for i in output:
+            print(f"[LOG] making makefile {load}/{len(output)}")
             target.write(i)
+            load += 1
+        
+    if (len(dir_prex)>1):
+        os.chdir(current)
+        print(f"[LOG] Entry in : {current}")
     print("[OK]: makefile successfuly builded!!")

@@ -40,11 +40,15 @@ class Circle_colison:Colison{
         Circle_colison(string tag, Circle* box):Colison(tag){
             this->box=box;
         }
-        bool oncolision(SDL_Rect *box2detec){
+        bool oncolision(Rect_colison *box2detec){
             return false;
         }
-        bool oncolision(Circle *box2detec){
-            return sqrt(pow(box2detec->getcenterx()-this->box->getcenterx(),2)+pow(box2detec->getcentery()-this->box->getcentery(),2))<=(box2detec->getradious()+this->box->getradious());
+        bool oncolision(Circle_colison *box2detec,string tag){
+            if (tag == box2detec->tag){
+                return sqrt(pow(box2detec->box->getcenterx()-this->box->getcenterx(),2)+pow(box2detec->box->getcentery()-this->box->getcentery(),2))<=(box2detec->box->getradious()+this->box->getradious());
+            }else{
+                return false;
+            }
         }
         void debug(SDL_Renderer * renderer){
             this->box->DrawCircle(renderer);

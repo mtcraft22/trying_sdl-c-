@@ -1,8 +1,5 @@
 
-#include "SDL_pixels.h"
-#include "SDL_render.h"
-#include "SDL_surface.h"
-#include <cstddef>
+#include "colison.hpp"
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -101,6 +98,7 @@ int main(int argc, char* argv[]) {
     int end = SDL_GetTicks();
     double delta = 0.0;
 
+    Circle_colison mouse_box_col = Circle_colison("mouse_box",&mouse_box);
     while (!quit) {
 
         start = SDL_GetTicks();
@@ -110,18 +108,29 @@ int main(int argc, char* argv[]) {
             end = start;
             cout << "frames: " << 1000/delta  << std::endl ;
             SDL_RenderClear(renderizador);
-            SDL_SetRenderDrawColor(renderizador, r, g, b, a);
-            //SDL_SetRenderDrawBlendMode(renderizador,SDL_BlendMode::SDL_BLENDMODE_MOD);
+            if (mouse_box_col.oncolision(&bolita)){
+                SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
+            }else{
+                SDL_SetRenderDrawColor(renderizador, r, g, b, a);
+            }
+            
+            /*SDL_SetRenderDrawBlendMode(renderizador,SDL_BlendMode::SDL_BLENDMODE_MOD);
             SDL_RenderGeometry(renderizador,capa2_text, vertical_grid, 3, NULL, 3);
-            trozo->draw_chunk(renderizador, tex);
+            trozo->draw_chunk(renderizador, tex);*/
+            bolita.setradious(25);
             bolita.DrawCircle(renderizador);
+            mouse_box.DrawCircle(renderizador);
+            
             SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
-            for (int i = bolita.getradious()-1; i>=0; i--){
+            /*for (int i = bolita.getradious()-1; i>=0; i--){
                 Circle bolita2 = Circle(bolita.getcenterx(),bolita.getcentery(),i);
                 bolita2.DrawCircle(renderizador);
-            }
+            }*/
             SDL_RenderPresent(renderizador);
             SDL_SetRenderDrawColor(renderizador,0,0,0,255);
+
+            mouse_box.setx(mx);
+            mouse_box.sety(my);
             while (SDL_PollEvent(&e)){
                 if (e.type == SDL_QUIT) { 
                     quit = true; 
