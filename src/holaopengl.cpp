@@ -99,6 +99,7 @@ int main(int argc, char* argv[]) {
     double delta = 0.0;
 
     Circle_colison mouse_box_col = Circle_colison("mouse_box",&mouse_box);
+    Circle_colison bolita_col = Circle_colison("bolita",&bolita);
     while (!quit) {
 
         start = SDL_GetTicks();
@@ -108,7 +109,7 @@ int main(int argc, char* argv[]) {
             end = start;
             cout << "frames: " << 1000/delta  << std::endl ;
             SDL_RenderClear(renderizador);
-            if (mouse_box_col.oncolision(&bolita)){
+            if (mouse_box_col.oncolision(&bolita_col,"bolita")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
             }else{
                 SDL_SetRenderDrawColor(renderizador, r, g, b, a);
