@@ -233,7 +233,7 @@ void terreno::draw(SDL_Renderer* renderizador,SDL_Texture* tex){
 }
 bool terreno::point_hit(int x,int y) {
 
-    
+    //point dectection in triangle from: http://jeffreythompson.org/collision-detection/tri-point.php
     double global_area_1 = abs((this->poligono1[1].position.x- this->poligono1[0].position.x)* (this->poligono1[2].position.y - this->poligono1[0].position.y)- (this->poligono1[2].position.x - this->poligono1[0].position.x) * (this->poligono1[1].position.y - this->poligono1[0].position.y));
 
     double point_area_1 = abs((this->poligono1[0].position.x - x) * (this->poligono1[1].position.y -y) - (this->poligono1[1].position.x - x) * (this->poligono1[0].position.y-y));

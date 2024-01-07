@@ -92,8 +92,8 @@ int main(int argc, char* argv[]) {
     float* grid_colision_offsets[2] = { 0,0 };
     
     terreno * seleciono = trozo->gridgroup.at(1).at(1);
-    Circle bolita = Circle(550+(30*5), 100+(15*5), 10);
-    Circle bolita2 = Circle(550+(30*5),100+(15*10), 25);
+    Circle bolita = Circle(800,100, 10);
+    Circle bolita2 = Circle(800,150, 25);
     int start = SDL_GetTicks();
     int end = SDL_GetTicks();
     double delta = 0.0;
@@ -112,23 +112,24 @@ int main(int argc, char* argv[]) {
             end = start;
             cout << "frames: " << 1000/delta  << std::endl ;
             SDL_RenderClear(renderizador);
-            if (mouse_box_col.oncolision("bolita")){
+            SDL_SetRenderDrawColor(renderizador, r,g,b,a);
+            if (mouse_box_col.oncolision("bolita")&& !mouse_box_col.oncolision("bolita2")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
-            }else if (mouse_box_col.oncolision("bolita2")){
+            }else if (mouse_box_col.oncolision("bolita2")&& !mouse_box_col.oncolision("bolita")){
                 SDL_SetRenderDrawColor(renderizador, 0, 0, 255, 255);
+            }else if (mouse_box_col.oncolision("bolita2")&&mouse_box_col.oncolision("bolita")){
+                SDL_SetRenderDrawColor(renderizador, 255, 0, 255, 255);
             }else{
                 SDL_SetRenderDrawColor(renderizador, r,g,b,a);
             }
             
-            /*SDL_SetRenderDrawBlendMode(renderizador,SDL_BlendMode::SDL_BLENDMODE_MOD);
-            SDL_RenderGeometry(renderizador,capa2_text, vertical_grid, 3, NULL, 3);
-            trozo->draw_chunk(renderizador, tex);*/
+            trozo->draw_chunk(renderizador, tex);
             bolita.setradious(25);
             bolita.DrawCircle(renderizador);
             bolita2.DrawCircle(renderizador);
             mouse_box.DrawCircle(renderizador);
             
-            SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
+            //SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
             /*for (int i = bolita.getradious()-1; i>=0; i--){
                 Circle bolita2 = Circle(bolita.getcenterx(),bolita.getcentery(),i);
                 bolita2.DrawCircle(renderizador);

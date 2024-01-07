@@ -12,15 +12,15 @@ Circle::Circle(int x,int y,int r){
 }
 void Circle::DrawCircle(SDL_Renderer *renderer)
 {
-   const int32_t diameter = (this->r * 2);
+   const int diameter = (this->r * 2);
 
-   int32_t x = (this->r - 1);
-   int32_t y = 0;
-   int32_t tx = 1;
-   int32_t ty = 1;
-   int32_t error = (tx - diameter);
+   int x = (this->r - 1);
+   int y = 0;
+   int tx = 1;
+   int ty = 1;
+   int error = (tx - diameter);
 
-   while (x >= y)
+   while (y <= x) //the loop goes from center x center y-radius from centerx + radius y
    {
       
       SDL_RenderDrawPoint(renderer, this->x + x, this->y - y);
@@ -35,14 +35,14 @@ void Circle::DrawCircle(SDL_Renderer *renderer)
      
       
 
-
+      // if error negative the poin is iside de circle
       if (error <= 0)
       {
          ++y;
          error += ty;
          ty += 2;
       }
-
+      //if error greater than 0 the point is outer the circle
       if (error > 0)
       {
          --x;
