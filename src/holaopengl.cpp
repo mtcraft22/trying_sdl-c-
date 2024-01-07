@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
     
     terreno * seleciono = trozo->gridgroup.at(1).at(1);
     Circle bolita = Circle(800,100, 10);
-    Circle bolita2 = Circle(800,150, 25);
+    Circle bolita2 = Circle(800,175, 25);
     int start = SDL_GetTicks();
     int end = SDL_GetTicks();
     double delta = 0.0;
