@@ -1,58 +1,35 @@
 #pragma once
-
 #include <string>
 #include <SDL.h>
 #include <circle.hpp>
 
-
 using namespace std;
-
 class Colison{
     public:
-        Colison(string tag){
-            this->tag=tag;
-        };
-        string get_tag(){
-            return this->tag;
-        };
+        Colison(string tag);
+        string get_tag();
         bool oncolision(SDL_Rect *box);
         bool oncolision(Circle *box);
         void debug_colision(SDL_Renderer* rendeizer);
     protected:
         string tag;      
 };
-class Rect_colison:Colison{
+class Rect_colison:public Colison{
     public:
-        Rect_colison(string tag, SDL_Rect* box):Colison(tag){
-            this->box=box;
-        }
-        bool oncolision(SDL_Rect *box2detec){
-            return false;
-        }
-        bool oncolision(Circle *box2detec){
-            return false;
-        }
+        Rect_colison(string tag, SDL_Rect* box);
+        bool oncolision(SDL_Rect *box2detec);
+        bool oncolision(Circle *box2detec);
     private:
         SDL_Rect * box;
 };
-class Circle_colison:Colison{
+class Circle_colison:public Colison{
     public:
-        Circle_colison(string tag, Circle* box):Colison(tag){
-            this->box=box;
-        }
-        bool oncolision(Rect_colison *box2detec){
-            return false;
-        }
-        bool oncolision(Circle_colison *box2detec,string tag){
-            if (tag == box2detec->tag){
-                return sqrt(pow(box2detec->box->getcenterx()-this->box->getcenterx(),2)+pow(box2detec->box->getcentery()-this->box->getcentery(),2))<=(box2detec->box->getradious()+this->box->getradious());
-            }else{
-                return false;
-            }
-        }
-        void debug(SDL_Renderer * renderer){
-            this->box->DrawCircle(renderer);
-        }
+        Circle_colison(string tag, Circle* box);
+        
+        bool oncolision(string tag);
+        void debug(SDL_Renderer * renderer);
     private:
         Circle * box;
 };
+int hash_colision(string colision_tag);
+void insert_Circle_colision(int hash, Circle_colison colision);

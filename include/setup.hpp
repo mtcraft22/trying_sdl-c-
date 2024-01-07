@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include <iostream>
+
 
 #ifndef setup
 #define setup

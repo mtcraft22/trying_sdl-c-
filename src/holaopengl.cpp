@@ -1,5 +1,4 @@
 
-#include "colison.hpp"
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -7,6 +6,7 @@
 #include <chunck.hpp>   
 #include <setup.hpp>
 #include <circle.hpp>
+#include <colison.hpp>
 
 
 
@@ -93,13 +93,16 @@ int main(int argc, char* argv[]) {
     
     terreno * seleciono = trozo->gridgroup.at(1).at(1);
     Circle bolita = Circle(550+(30*5), 100+(15*5), 10);
-
+    Circle bolita2 = Circle(550+(30*5),100+(15*10), 25);
     int start = SDL_GetTicks();
     int end = SDL_GetTicks();
     double delta = 0.0;
 
     Circle_colison mouse_box_col = Circle_colison("mouse_box",&mouse_box);
     Circle_colison bolita_col = Circle_colison("bolita",&bolita);
+    Circle_colison bolita_2_col  = Circle_colison("bolita2",&bolita2);
+    
+    
     while (!quit) {
 
         start = SDL_GetTicks();
@@ -109,10 +112,12 @@ int main(int argc, char* argv[]) {
             end = start;
             cout << "frames: " << 1000/delta  << std::endl ;
             SDL_RenderClear(renderizador);
-            if (mouse_box_col.oncolision(&bolita_col,"bolita")){
+            if (mouse_box_col.oncolision("bolita")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
+            }else if (mouse_box_col.oncolision("bolita2")){
+                SDL_SetRenderDrawColor(renderizador, 0, 0, 255, 255);
             }else{
-                SDL_SetRenderDrawColor(renderizador, r, g, b, a);
+                SDL_SetRenderDrawColor(renderizador, r,g,b,a);
             }
             
             /*SDL_SetRenderDrawBlendMode(renderizador,SDL_BlendMode::SDL_BLENDMODE_MOD);
@@ -120,6 +125,7 @@ int main(int argc, char* argv[]) {
             trozo->draw_chunk(renderizador, tex);*/
             bolita.setradious(25);
             bolita.DrawCircle(renderizador);
+            bolita2.DrawCircle(renderizador);
             mouse_box.DrawCircle(renderizador);
             
             SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
