@@ -17,8 +17,8 @@ class Colison{
 class Rect_colison:public Colison{
     public:
         Rect_colison(string tag, SDL_Rect* box);
-        bool oncolision(SDL_Rect *box2detec);
-        bool oncolision(Circle *box2detec);
+        bool oncolision(string tag);
+        
     private:
         SDL_Rect * box;
 };

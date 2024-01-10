@@ -15,14 +15,58 @@ string Colison::get_tag(){
     return this->tag;
 }
 Rect_colison::Rect_colison(string tag, SDL_Rect* box):Colison(tag){
-    this->tag=tag;
+    this->box=box;
     Rect_ColisionDB[this->tag]=this;
 }
-bool Rect_colison::oncolision(SDL_Rect *box2detec){
-    return false;
-}
-bool Rect_colison::oncolision(Circle *box2detec){
-    return false;
+bool Rect_colison::oncolision(string tag){
+    try {
+        Rect_colison* box2detec = Rect_ColisionDB[tag];
+
+        int area1 = box2detec->box->h * box2detec->box->w;
+        int area2 = this->box->h * this->box->w;
+
+        if (area1 <= area2) {
+            return ( ((box2detec->box->x < (this->box->x + this->box->w) && box2detec->box->x > this->box->x)
+                &&
+                (box2detec->box->y < (this->box->y + this->box->h) && box2detec->box->y > this->box->y))
+                ||
+                ((box2detec->box->x + box2detec->box->w > this->box->x && box2detec->box->x + box2detec->box->w < (this->box->x + this->box->w))
+                &&
+                (box2detec->box->y < (this->box->y + this->box->h) && box2detec->box->y > this->box->y))
+                ||
+                ((box2detec->box->x < (this->box->x + this->box->w) && box2detec->box->x > this->box->x)
+                &&
+                ((box2detec->box->y + box2detec->box->x) < (this->box->y + this->box->h) && box2detec->box->y + box2detec->box->x > this->box->y))
+                ||
+                ((box2detec->box->y + box2detec->box->x) < (this->box->y + this->box->h) && box2detec->box->y + box2detec->box->x > this->box->y)
+                &&
+                ((box2detec->box->x + box2detec->box->w > this->box->x && box2detec->box->x + box2detec->box->w < (this->box->x + this->box->w))));
+
+        }
+        else {
+            return (((this->box->x < (this->box->x + this->box->w) && box2detec->box->x > this->box->x)
+                &&
+                (this->box->y < (this->box->y + this->box->h) && box2detec->box->y > this->box->y))
+                ||
+                ((this->box->x + this->box->w > box2detec->box->x && this->box->x + this->box->w < (box2detec->box->x + box2detec->box->w))
+                &&
+                (this->box->y < (box2detec->box->y + box2detec->box->h) && this->box->y > box2detec->box->y))
+                ||
+                ((this->box->x < (this->box->x + box2detec->box->w) && this->box->x > box2detec->box->x)
+                &&
+                ((this->box->y + this->box->x) < (box2detec->box->y + box2detec->box->h) && this->box->y + this->box->x > box2detec->box->y))
+                ||
+                ((this->box->y + this->box->x) < (box2detec->box->y + box2detec->box->h) && this->box->y + this->box->x > box2detec->box->y)
+                &&
+                ((this->box->x + this->box->w > box2detec->box->x && box2detec->box->x + this->box->w < (box2detec->box->x + box2detec->box->w))));
+        }
+
+
+        
+    }
+    catch (std::out_of_range) {
+        return false;
+    }
 }
 Circle_colison::Circle_colison(string tag, Circle* box):Colison(tag){
     this->box=box; 

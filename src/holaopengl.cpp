@@ -98,10 +98,15 @@ int main(int argc, char* argv[]) {
     int end = SDL_GetTicks();
     double delta = 0.0;
 
+    SDL_Rect mouse_rect = { 0,0,30,30 };
+    SDL_Rect colision = { 800,225,10,40 };
+
     Circle_colison mouse_box_col = Circle_colison("mouse_box",&mouse_box);
     Circle_colison bolita_col = Circle_colison("bolita",&bolita);
     Circle_colison bolita_2_col  = Circle_colison("bolita2",&bolita2);
     
+    Rect_colison mouse_rec_col = Rect_colison("mouse_rect_col", &mouse_rect);
+    Rect_colison colision_col = Rect_colison("colision_col", &colision);
     
     while (!quit) {
 
@@ -110,8 +115,9 @@ int main(int argc, char* argv[]) {
         
         if (delta>sdl_ticks_4_frame){
             end = start;
-            cout << "frames: " << 1000/delta  << std::endl ;
+      
             SDL_RenderClear(renderizador);
+            
             SDL_SetRenderDrawColor(renderizador, r,g,b,a);
             if (mouse_box_col.oncolision("bolita")&& !mouse_box_col.oncolision("bolita2")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
@@ -122,7 +128,14 @@ int main(int argc, char* argv[]) {
             }else{
                 SDL_SetRenderDrawColor(renderizador, r,g,b,a);
             }
-            
+            if (mouse_rec_col.oncolision("colision_col")) {
+                SDL_SetRenderDrawColor(renderizador, 100, 100, 100, 255);
+            }
+            else {
+                SDL_SetRenderDrawColor(renderizador, r, g, b, a);
+            }
+            SDL_RenderDrawRect(renderizador, &colision);
+            SDL_RenderDrawRect(renderizador, &mouse_rect);
             trozo->draw_chunk(renderizador, tex);
             bolita.setradious(25);
             bolita.DrawCircle(renderizador);
@@ -137,8 +150,8 @@ int main(int argc, char* argv[]) {
             SDL_RenderPresent(renderizador);
             SDL_SetRenderDrawColor(renderizador,0,0,0,255);
 
-            mouse_box.setx(mx);
-            mouse_box.sety(my);
+            mouse_rect.x = mx - (mouse_rect.w/2);
+            mouse_rect.y = my - (mouse_rect.h / 2);
             while (SDL_PollEvent(&e)){
                 if (e.type == SDL_QUIT) { 
                     quit = true; 
