@@ -98,9 +98,9 @@ int main(int argc, char* argv[]) {
     int end = SDL_GetTicks();
     double delta = 0.0;
 
-    SDL_Rect mouse_rect = { 0,0,40,40 };
-    SDL_Rect colision = { 800,225,60,60 };
-    SDL_Rect colision2 = { 725,225,20,20 };
+    SDL_Rect mouse_rect = { 0,0,70,20 };
+    SDL_Rect colision = { 800,225,30,60 };
+    SDL_Rect colision2 = { 725,225,10,20 };
 
     Circle_colison mouse_box_col = Circle_colison("mouse_box",&mouse_box);
     Circle_colison bolita_col = Circle_colison("bolita",&bolita);
@@ -128,13 +128,12 @@ int main(int argc, char* argv[]) {
                 SDL_SetRenderDrawColor(renderizador, 0, 0, 255, 255);
             }else if (mouse_box_col.oncolision("bolita2")&&mouse_box_col.oncolision("bolita")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 255, 255);
-            }else{
-                SDL_SetRenderDrawColor(renderizador, r,g,b,a);
-            }
-            if (mouse_rec_col.oncolision("colision_col") || mouse_rec_col.oncolision("colision_2")) {
-                SDL_SetRenderDrawColor(renderizador, 100, 100, 100, 255);
-            }
-            else {
+            }else
+            if (mouse_rec_col.oncolision("colision_col") ) {
+                SDL_SetRenderDrawColor(renderizador, 100, 0, 100, 255);
+            }else if (mouse_rec_col.oncolision("colision_2")) {
+                SDL_SetRenderDrawColor(renderizador, 166, 0, 166, 255);
+            }else {
                 SDL_SetRenderDrawColor(renderizador, r, g, b, a);
             }
             SDL_RenderDrawRect(renderizador, &colision);
@@ -156,6 +155,9 @@ int main(int argc, char* argv[]) {
 
             mouse_rect.x = mx - (mouse_rect.w/2);
             mouse_rect.y = my - (mouse_rect.h / 2);
+
+            //mouse_box.setx(mx);
+            //mouse_box.sety(my);
             while (SDL_PollEvent(&e)){
                 if (e.type == SDL_QUIT) { 
                     quit = true; 
