@@ -26,39 +26,92 @@ bool Rect_colison::oncolision(string tag){
         int area2 = this->box->h * this->box->w;
 
         if (area1 <= area2) {
-            return ( ((box2detec->box->x < (this->box->x + this->box->w) && box2detec->box->x > this->box->x)
-                &&
-                (box2detec->box->y < (this->box->y + this->box->h) && box2detec->box->y > this->box->y))
-                ||
-                ((box2detec->box->x + box2detec->box->w > this->box->x && box2detec->box->x + box2detec->box->w < (this->box->x + this->box->w))
-                &&
-                (box2detec->box->y < (this->box->y + this->box->h) && box2detec->box->y > this->box->y))
-                ||
-                ((box2detec->box->x < (this->box->x + this->box->w) && box2detec->box->x > this->box->x)
-                &&
-                ((box2detec->box->y + box2detec->box->x) < (this->box->y + this->box->h) && box2detec->box->y + box2detec->box->x > this->box->y))
-                ||
-                ((box2detec->box->y + box2detec->box->x) < (this->box->y + this->box->h) && box2detec->box->y + box2detec->box->x > this->box->y)
-                &&
-                ((box2detec->box->x + box2detec->box->w > this->box->x && box2detec->box->x + box2detec->box->w < (this->box->x + this->box->w))));
+            return 
+                (
+                    (
+                        (
+                            box2detec->box->x < (this->box->x + this->box->w) && box2detec->box->x > this->box->x
+                        )
+                        &&
+                        (
+                            box2detec->box->y < (this->box->y + this->box->h) && box2detec->box->y > this->box->y
+                        )
+                    )
+                    ||
+                    (
+                        (
+                            (box2detec->box->x+box2detec->box->w) < (this->box->x + this->box->w) && (box2detec->box->x+box2detec->box->w) > this->box->x
+                        )
+                        &&
+                        (
+                            (box2detec->box->y+box2detec->box->h) < (this->box->y + this->box->h) && (box2detec->box->y+box2detec->box->h) > this->box->y
+                        )
+                    )
+                    ||
+                    (
+                        (
+                            box2detec->box->x < (this->box->x + this->box->w) && box2detec->box->x > this->box->x
+                        )
+                        &&
+                        (
+                            (box2detec->box->y+box2detec->box->h) < (this->box->y + this->box->h) && (box2detec->box->y+box2detec->box->h) > this->box->y
+                        )
+                    )
+                    ||
+                    (
+                        (
+                            (box2detec->box->x+box2detec->box->w) < (this->box->x + this->box->w) && (box2detec->box->x+box2detec->box->w) > this->box->x
+                        )
+                        &&
+                        (
+                            box2detec->box->y < (this->box->y + this->box->h) && box2detec->box->y > this->box->y
+                        )
+                    )
+            );
 
         }
         else {
-            return (((this->box->x < (this->box->x + this->box->w) && box2detec->box->x > this->box->x)
-                &&
-                (this->box->y < (this->box->y + this->box->h) && box2detec->box->y > this->box->y))
+            return (
+                (   
+                    (
+                        this->box->x < (box2detec->box->x + box2detec->box->w) && this->box->x > box2detec->box->x
+                    )
+                    &&
+                    (
+                        this->box->y < (box2detec->box->y + box2detec->box->h) && this->box->y > box2detec->box->y
+                    )
+                )
                 ||
-                ((this->box->x + this->box->w > box2detec->box->x && this->box->x + this->box->w < (box2detec->box->x + box2detec->box->w))
-                &&
-                (this->box->y < (box2detec->box->y + box2detec->box->h) && this->box->y > box2detec->box->y))
+                (
+                    (
+                        (this->box->x+this->box->w) < (box2detec->box->x + box2detec->box->w) && (this->box->x+this->box->w) > box2detec->box->x
+                    )
+                    &&
+                    (
+                        (this->box->y+this->box->h) < (box2detec->box->y + box2detec->box->h) && (this->box->y+this->box->h) > box2detec->box->y
+                    )
+                )
                 ||
-                ((this->box->x < (this->box->x + box2detec->box->w) && this->box->x > box2detec->box->x)
-                &&
-                ((this->box->y + this->box->x) < (box2detec->box->y + box2detec->box->h) && this->box->y + this->box->x > box2detec->box->y))
+                (
+                    (
+                        this->box->x < (box2detec->box->x + box2detec->box->w) && this->box->x > box2detec->box->x
+                    )
+                    &&
+                    (
+                        (this->box->y+box2detec->box->h) < (box2detec->box->y + box2detec->box->h) && (this->box->y+this->box->h) > box2detec->box->y
+                    )
+                )
                 ||
-                ((this->box->y + this->box->x) < (box2detec->box->y + box2detec->box->h) && this->box->y + this->box->x > box2detec->box->y)
-                &&
-                ((this->box->x + this->box->w > box2detec->box->x && box2detec->box->x + this->box->w < (box2detec->box->x + box2detec->box->w))));
+                (
+                    (
+                        (this->box->x+box2detec->box->w) < (box2detec->box->x + box2detec->box->w) && (this->box->x+this->box->w) > box2detec->box->x
+                    )
+                    &&
+                    (
+                        this->box->y < (box2detec->box->y + box2detec->box->h) && this->box->y > box2detec->box->y
+                    )
+                )
+            );
         }
 
 

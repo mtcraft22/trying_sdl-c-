@@ -98,8 +98,9 @@ int main(int argc, char* argv[]) {
     int end = SDL_GetTicks();
     double delta = 0.0;
 
-    SDL_Rect mouse_rect = { 0,0,30,30 };
-    SDL_Rect colision = { 800,225,10,40 };
+    SDL_Rect mouse_rect = { 0,0,40,40 };
+    SDL_Rect colision = { 800,225,60,60 };
+    SDL_Rect colision2 = { 725,225,20,20 };
 
     Circle_colison mouse_box_col = Circle_colison("mouse_box",&mouse_box);
     Circle_colison bolita_col = Circle_colison("bolita",&bolita);
@@ -107,7 +108,9 @@ int main(int argc, char* argv[]) {
     
     Rect_colison mouse_rec_col = Rect_colison("mouse_rect_col", &mouse_rect);
     Rect_colison colision_col = Rect_colison("colision_col", &colision);
-    
+    Rect_colison colision2_col = Rect_colison("colision_2",&colision2);
+
+
     while (!quit) {
 
         start = SDL_GetTicks();
@@ -128,13 +131,14 @@ int main(int argc, char* argv[]) {
             }else{
                 SDL_SetRenderDrawColor(renderizador, r,g,b,a);
             }
-            if (mouse_rec_col.oncolision("colision_col")) {
+            if (mouse_rec_col.oncolision("colision_col") || mouse_rec_col.oncolision("colision_2")) {
                 SDL_SetRenderDrawColor(renderizador, 100, 100, 100, 255);
             }
             else {
                 SDL_SetRenderDrawColor(renderizador, r, g, b, a);
             }
             SDL_RenderDrawRect(renderizador, &colision);
+            SDL_RenderDrawRect(renderizador, &colision2);
             SDL_RenderDrawRect(renderizador, &mouse_rect);
             trozo->draw_chunk(renderizador, tex);
             bolita.setradious(25);
