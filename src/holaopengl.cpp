@@ -1,8 +1,10 @@
 
+#include "SDL_render.h"
+#include <cmath>
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
-
+#include <vector>
 #include <chunck.hpp>   
 #include <setup.hpp>
 #include <circle.hpp>
@@ -12,9 +14,11 @@
 
 using namespace std;
 
-#define sdl_ticks_4_frame 1000/30.0
+#define sdl_ticks_4_frame 1000/60.0
 
 int mx, my;
+
+double torad(int angle){return (angle*180)*3.1416;}
 int main(int argc, char* argv[]) {
     if (!init_sdl()) {
         cout << SDL_GetError();
@@ -98,9 +102,13 @@ int main(int argc, char* argv[]) {
     int end = SDL_GetTicks();
     double delta = 0.0;
 
-    SDL_Rect mouse_rect = { 0,0,70,20 };
+    /*SDL_Rect mouse_rect = { 0,0,70,20 };
     SDL_Rect colision = { 800,225,30,60 };
-    SDL_Rect colision2 = { 725,225,10,20 };
+    SDL_Rect colision2 = { 725,225,10,20 };*/
+
+    SDL_Rect mouse_rect = { 200,200,10,10 };
+    SDL_Rect colision = { 100,0,10,10 };
+    SDL_Rect colision2 = { 500,500,50,50 };
 
     Circle_colison mouse_box_col = Circle_colison("mouse_box",&mouse_box);
     Circle_colison bolita_col = Circle_colison("bolita",&bolita);
@@ -110,7 +118,8 @@ int main(int argc, char* argv[]) {
     Rect_colison colision_col = Rect_colison("colision_col", &colision);
     Rect_colison colision2_col = Rect_colison("colision_2",&colision2);
 
-
+            int angle = 0;
+    vector<SDL_Vertex> vertecies ;
     while (!quit) {
 
         start = SDL_GetTicks();
@@ -118,38 +127,30 @@ int main(int argc, char* argv[]) {
         
         if (delta>sdl_ticks_4_frame){
             end = start;
-      
             SDL_RenderClear(renderizador);
-            
             SDL_SetRenderDrawColor(renderizador, r,g,b,a);
-            if (mouse_box_col.oncolision("bolita")&& !mouse_box_col.oncolision("bolita2")){
+            if (colision2_col.oncolision("mouse_box")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
-            }else if (mouse_box_col.oncolision("bolita2")&& !mouse_box_col.oncolision("bolita")){
-                SDL_SetRenderDrawColor(renderizador, 0, 0, 255, 255);
-            }else if (mouse_box_col.oncolision("bolita2")&&mouse_box_col.oncolision("bolita")){
-                SDL_SetRenderDrawColor(renderizador, 255, 0, 255, 255);
-            }else
-            if (mouse_rec_col.oncolision("colision_col") ) {
-                SDL_SetRenderDrawColor(renderizador, 100, 0, 100, 255);
-            }else if (mouse_rec_col.oncolision("colision_2")) {
-                SDL_SetRenderDrawColor(renderizador, 166, 0, 166, 255);
-            }else {
+            }else if(mouse_box_col.oncolision("bolita")){
+                SDL_SetRenderDrawColor(renderizador, 0, 0, 255,255);
+            }else{
                 SDL_SetRenderDrawColor(renderizador, r, g, b, a);
             }
-            SDL_RenderDrawRect(renderizador, &colision);
             SDL_RenderDrawRect(renderizador, &colision2);
-            SDL_RenderDrawRect(renderizador, &mouse_rect);
+            bolita.DrawCircle(renderizador);
             trozo->draw_chunk(renderizador, tex);
             bolita.setradious(25);
-            bolita.DrawCircle(renderizador);
-            bolita2.DrawCircle(renderizador);
-            mouse_box.DrawCircle(renderizador);
             
+            mouse_box.DrawCircle(renderizador);
+            mouse_box.sety(my);
+            mouse_box.setx(mx);
+
+
             //SDL_SetRenderDrawColor(renderizador, 255, 0, 0, 255);
-            /*for (int i = bolita.getradious()-1; i>=0; i--){
-                Circle bolita2 = Circle(bolita.getcenterx(),bolita.getcentery(),i);
-                bolita2.DrawCircle(renderizador);
-            }*/
+            //for (int i = bolita.getradious()-1; i>=0; i--){
+              //  Circle bolita2 = Circle(bolita.getcenterx(),bolita.getcentery(),i);
+                //bolita2.DrawCircle(renderizador);
+            //}
             SDL_RenderPresent(renderizador);
             SDL_SetRenderDrawColor(renderizador,0,0,0,255);
 
@@ -157,7 +158,7 @@ int main(int argc, char* argv[]) {
             mouse_rect.y = my - (mouse_rect.h / 2);
 
             //mouse_box.setx(mx);
-            //mouse_box.sety(my);
+            //mouse_box.sety(my);*/
             while (SDL_PollEvent(&e)){
                 if (e.type == SDL_QUIT) { 
                     quit = true; 
@@ -165,6 +166,7 @@ int main(int argc, char* argv[]) {
                 else if (e.type == SDL_KEYDOWN) {
                     switch (e.key.keysym.sym){
                         case SDLK_d:
+                            angle --;
                             if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
                                 bolita.sety(bolita.getcenterx() + 1);
                             }
@@ -174,6 +176,7 @@ int main(int argc, char* argv[]) {
                             seleciono->move(BOTTOM_RIGHT, 1, 0);
                             break;
                         case SDLK_a:
+                            angle ++;
                             if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
                                 bolita.sety(bolita.getcenterx() - 1);
                             }

@@ -18,6 +18,7 @@ class Rect_colison:public Colison{
     public:
         Rect_colison(string tag, SDL_Rect* box);
         bool oncolision(string tag);
+        SDL_Rect * get_box();
         
     private:
         SDL_Rect * box;
@@ -28,6 +29,7 @@ class Circle_colison:public Colison{
         
         bool oncolision(string tag);
         void debug(SDL_Renderer * renderer);
+        Circle * get_box();
     private:
         Circle * box;
 };
