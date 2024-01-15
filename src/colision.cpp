@@ -12,72 +12,15 @@ map<string, Rect_colison*> Rect_ColisionDB = map<string, Rect_colison*>();
 
 bool col_rect_circ(Circle* circulo , SDL_Rect* rec){
     
-        if (circulo->getcenterx() < rec->x && rec->y + (int)(rec->h / 2) == circulo->getcentery()) {
-            if (
-                sqrt(pow(circulo->getcenterx() - rec->x, 2) + pow(circulo->getcentery() - (rec->y + (int)(rec->h / 2)), 2))
-                <= circulo->getradious()
-                )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else if (circulo->getcenterx() < rec->x && rec->y > circulo->getcentery()) {
-            if (
-                sqrt(pow(circulo->getcenterx() - rec->x, 2) + pow(circulo->getcentery() - rec->y, 2))
-                <= circulo->getradious()
-                )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else if (circulo->getcenterx() == rec->x+(int)(rec->w / 2) && rec->y > circulo->getcentery()) {
-            if (
-                sqrt(pow(circulo->getcenterx() - (rec->x+(int)(rec->w / 2)), 2) + pow(circulo->getcentery() - rec->y , 2))
-                <= circulo->getradious()
-                )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else if (circulo->getcenterx() > rec->x && rec->y > circulo->getcentery()) {
-            if (
-                sqrt(pow(circulo->getcenterx() - (rec->x + rec->w), 2) + pow(circulo->getcentery() - rec->y, 2))
-                <= circulo->getradious()
-                )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        if (circulo->getcenterx() > rec->x && rec->y + (int)(rec->h / 2) == circulo->getcentery()) {
-            if (
-                sqrt(pow(circulo->getcenterx() - (rec->x+rec->w), 2) + pow(circulo->getcentery() - (rec->y + (int)(rec->h / 2)), 2))
-                <= circulo->getradious()
-                )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    return false;
+    return 
+    !(circulo->getcentery()+circulo->getradious() < rec->y &&  ((circulo->getcenterx() > rec->x) && (circulo->getcenterx() < (rec->w + rec->x))))
+    &&
+    !(circulo->getcenterx()+circulo->getradious() < rec->x && (circulo->getcentery() > rec->y && circulo->getcentery() < (rec->h + rec->y) ))
+    &&
+    !(circulo->getcentery()+circulo->getradious() > rec->y+rec->h &&  ((circulo->getcenterx() > rec->x) && (circulo->getcenterx() < (rec->w + rec->x))))
+    &&
+    !(circulo->getcenterx()+circulo->getradious() > rec->x+rec->w && (circulo->getcentery() > rec->y && circulo->getcentery() < (rec->h + rec->y) ));
+          
 }
 
 
