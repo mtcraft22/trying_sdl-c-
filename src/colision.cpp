@@ -1,4 +1,5 @@
 #include <circle.hpp>
+#include <cmath>
 #include <colison.hpp>
 
 #include <map>
@@ -12,14 +13,28 @@ map<string, Rect_colison*> Rect_ColisionDB = map<string, Rect_colison*>();
 
 bool col_rect_circ(Circle* circulo , SDL_Rect* rec){
     
-    return 
-    !(circulo->getcentery()+circulo->getradious() < rec->y &&  ((circulo->getcenterx() > rec->x) && (circulo->getcenterx() < (rec->w + rec->x))))
-    &&
-    !(circulo->getcenterx()+circulo->getradious() < rec->x && (circulo->getcentery() > rec->y && circulo->getcentery() < (rec->h + rec->y) ))
-    &&
-    !(circulo->getcentery()+circulo->getradious() > rec->y+rec->h &&  ((circulo->getcenterx() > rec->x) && (circulo->getcenterx() < (rec->w + rec->x))))
-    &&
-    !(circulo->getcenterx()+circulo->getradious() > rec->x+rec->w && (circulo->getcentery() > rec->y && circulo->getcentery() < (rec->h + rec->y) ));
+    int hh = rec->h/2;
+    int hw = rec->w/2;
+    int hd2 = pow(hh,2) + pow(hw,2);
+    bool col = false;
+
+    if (circulo->getcenterx() > rec->x && circulo->getcenterx() < rec->x+rec->w){
+        col =  
+        (pow(circulo->getcenterx() - (rec->x+hw), 2) 
+        + 
+        pow(circulo->getcentery() - (rec->y+hh), 2))
+        <= 
+        (circulo->getradious()+hh )
+        * 
+        (circulo->getradious()+hh );
+    }else if (circulo->getcentery() > rec->y && circulo->getcentery() <  rec->y+rec->h){ 
+      
+    }else {
+
+    }
+
+
+    return col;
           
 }
 
