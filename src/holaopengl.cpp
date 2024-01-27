@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
 
     SDL_Rect mouse_rect = { 200,200,10,10 };
     SDL_Rect colision = { 100,0,10,10 };
-    SDL_Rect colision2 = { 500,500,75,20 };
+    SDL_Rect colision2 = { 500,500,50,50 };
 
     Circle_colison mouse_box_col = Circle_colison("mouse_box",&mouse_box);
     Circle_colison bolita_col = Circle_colison("bolita",&bolita);

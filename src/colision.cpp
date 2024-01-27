@@ -1,3 +1,6 @@
+#include "SDL_rect.h"
+#include "SDL_render.h"
+#include <algorithm>
 #include <circle.hpp>
 #include <cmath>
 #include <colison.hpp>
@@ -6,36 +9,16 @@
 #include <stdexcept>
 #include <string>
 
-
+using namespace std;
 map<string, Circle_colison*> Circle_ColisionDB = map<string, Circle_colison*>();
 map<string, Rect_colison*> Rect_ColisionDB = map<string, Rect_colison*>();
 
 
-bool col_rect_circ(Circle* circulo , SDL_Rect* rec){
+bool col_rect_circ(Circle* circulo, SDL_Rect* rec, SDL_Renderer* debug  ){
     
-    int hh = rec->h/2;
-    int hw = rec->w/2;
-    int hd2 = pow(hh,2) + pow(hw,2);
-    bool col = false;
-
-    if (circulo->getcenterx() > rec->x && circulo->getcenterx() < rec->x+rec->w){
-        col =  
-        (pow(circulo->getcenterx() - (rec->x+hw), 2) 
-        + 
-        pow(circulo->getcentery() - (rec->y+hh), 2))
-        <= 
-        (circulo->getradious()+hh )
-        * 
-        (circulo->getradious()+hh );
-    }else if (circulo->getcentery() > rec->y && circulo->getcentery() <  rec->y+rec->h){ 
-      
-    }else {
-
-    }
-
-
-    return col;
-          
+    int ny = clamp(circulo->getcentery(),rec->y,rec->y+rec->h);
+    int nx = clamp(circulo->getcenterx(),rec->x,rec->y+rec->w);
+    return pow(circulo->getcenterx()-nx,2) + pow(circulo->getcentery()-ny,2) <= (circulo->getradious()) * (circulo->getradious());
 }
 
 
