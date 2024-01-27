@@ -14,7 +14,7 @@ map<string, Circle_colison*> Circle_ColisionDB = map<string, Circle_colison*>();
 map<string, Rect_colison*> Rect_ColisionDB = map<string, Rect_colison*>();
 
 
-bool col_rect_circ(Circle* circulo, SDL_Rect* rec, SDL_Renderer* debug  ){
+bool col_rect_circ(Circle* circulo, SDL_Rect* rec  ){
     
     int ny = clamp(circulo->getcentery(),rec->y,rec->y+rec->h);
     int nx = clamp(circulo->getcenterx(),rec->x,rec->y+rec->w);
