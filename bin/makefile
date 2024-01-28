@@ -11,9 +11,11 @@ chunck.o:../src/chunck.cpp
 	g++ -c ../src/chunck.cpp $(Include)
 grid.o:../src/grid.cpp
 	g++ -c ../src/grid.cpp $(Include)
+physics.o:../src/physics.cpp
+	g++ -c ../src/physics.cpp $(Include)
 circle.o:../src/circle.cpp
 	g++ -c ../src/circle.cpp $(Include)
-all:setupsdl.o holaopengl.o colision.o chunck.o grid.o circle.o 
+all:setupsdl.o holaopengl.o colision.o chunck.o grid.o physics.o circle.o 
 	g++ -o ../release/Tryingsdl.out $(objects) $(lib)
 clear:
 	rm -r $(objects)

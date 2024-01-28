@@ -14,10 +14,12 @@ map<string, Circle_colison*> Circle_ColisionDB = map<string, Circle_colison*>();
 map<string, Rect_colison*> Rect_ColisionDB = map<string, Rect_colison*>();
 
 
-bool col_rect_circ(Circle* circulo, SDL_Rect* rec  ){
+bool col_rect_circ(Circle* circulo, SDL_Rect* rec ){
     
     int ny = clamp(circulo->getcentery(),rec->y,rec->y+rec->h);
     int nx = clamp(circulo->getcenterx(),rec->x,rec->y+rec->w);
+
+    
     return pow(circulo->getcenterx()-nx,2) + pow(circulo->getcentery()-ny,2) <= (circulo->getradious()) * (circulo->getradious());
 }
 
@@ -124,7 +126,7 @@ bool Rect_colison::oncolision(string tag){
        
         try{
             Circle_colison *box2detec  =  Circle_ColisionDB.at(tag);
-            return col_rect_circ(box2detec->get_box(), this->box);
+            return col_rect_circ(box2detec->get_box(),this->box);
         }catch(std::out_of_range){
             return false; 
         }

@@ -9,7 +9,7 @@
 #include <setup.hpp>
 #include <circle.hpp>
 #include <colison.hpp>
-
+#include <physics.hpp>
 
 
 using namespace std;
@@ -120,6 +120,10 @@ int main(int argc, char* argv[]) {
 
             int angle = 0;
     vector<SDL_Vertex> vertecies ;
+    int over = 0;
+
+    Entity rec_phys = Entity(1,colision2.x,colision2.y);
+
     while (!quit) {
 
         start = SDL_GetTicks();
@@ -131,6 +135,15 @@ int main(int argc, char* argv[]) {
             SDL_SetRenderDrawColor(renderizador, r,g,b,a);
             if (colision2_col.oncolision("mouse_box")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
+                
+                rec_phys.addforce(vector2D(1,-1));
+
+                colision2.x = rec_phys.getpos().getx();
+                colision2.y = rec_phys.getpos().gety();
+
+            
+                
+                
             }else if(mouse_box_col.oncolision("bolita")){
                 SDL_SetRenderDrawColor(renderizador, 0, 0, 255,255);
             }else{
