@@ -1,4 +1,5 @@
 
+#include "SDL_video.h"
 #include <SDL.h>
 #include <iostream>
 #include <setup.hpp>
@@ -24,7 +25,7 @@ SDL_Window * make_window_(){
         SDL_WINDOWPOS_UNDEFINED, 
         WITH,
         HEIGHT, 
-        SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE
+        SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE| SDL_WINDOW_VULKAN
     );
     if( window == NULL )
     {

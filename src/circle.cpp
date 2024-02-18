@@ -1,53 +1,34 @@
+#include "SDL_rect.h"
+#include "SDL_render.h"
 #include <SDL.h>
-#include <SDL_render.h>
-#include <SDL_timer.h>
 #include <circle.hpp>
-
+#include <cmath>
+#include <iostream>
 
 
 Circle::Circle(int x,int y,int r){
    this->x=x;
    this->y=y;
    this->r=r;
+  
+   srand(time_t(NULL));
 }
+
 void Circle::DrawCircle(SDL_Renderer *renderer)
 {
-   const int diameter = (this->r * 2);
 
-   int x = (this->r - 1);
-   int y = 0;
-   int tx = 1;
-   int ty = 1;
-   int error = (tx - diameter);
-
-   while (y <= x) //the loop goes from center x center y-radius from centerx + radius y
-   {
+    SDL_Point prev = {0,0};
+    
+    prev.x = cos(0)*this->r+this->x;
+    prev.y = sin(0)*this->r+this->y;
+    for (int i = 1 ; i<= 360; i++){
       
-      SDL_RenderDrawPoint(renderer, this->x + x, this->y - y);
-      SDL_RenderDrawPoint(renderer, this->x + x, this->y + y);
-      SDL_RenderDrawPoint(renderer, this->x - x, this->y - y);
-      SDL_RenderDrawPoint(renderer, this->x - x, this->y + y);
+        SDL_RenderDrawLine(renderer, prev.x, prev.y, cos(((float)i/180)*3.1416)*this->r+this->x,sin(((float)i/180)*3.1416)*this->r+this->y);
 
-      SDL_RenderDrawPoint(renderer, this->x + y, this->y - x);
-      SDL_RenderDrawPoint(renderer, this->x + y, this->y + x);
-      SDL_RenderDrawPoint(renderer, this->x - y, this->y - x);
-      SDL_RenderDrawPoint(renderer, this->x - y, this->y + x);
-     
-      
-
-      // if error negative the poin is iside de circle
-      if (error <= 0)
-      {
-         ++y;
-         error += ty;
-         ty += 2;
-      }
-      //if error greater than 0 the point is outer the circle
-      if (error > 0)
-      {
-         --x;
-         tx += 2;
-         error += (tx - diameter);
-      }
-   }
+        prev.x = cos(((float)i/180)*3.1416)*this->r+this->x;
+        prev.y = sin(((float)i/180)*3.1416)*this->r+this->y;
+    }
 }
+
+
+

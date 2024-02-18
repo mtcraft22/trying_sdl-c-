@@ -25,5 +25,7 @@ class Circle{
             }
         }
     private:
+     
+    
         int x,y,r;  
 };

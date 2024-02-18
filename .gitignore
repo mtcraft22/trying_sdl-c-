@@ -2,3 +2,5 @@
 /release/*.out
 .vscode/
 .idea/
+CMake*
+.vs/

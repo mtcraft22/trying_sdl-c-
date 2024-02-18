@@ -1,4 +1,5 @@
 
+#include "SDL_keycode.h"
 #include "SDL_render.h"
 #include <cmath>
 #include <iostream>
@@ -135,11 +136,7 @@ int main(int argc, char* argv[]) {
             SDL_SetRenderDrawColor(renderizador, r,g,b,a);
             if (colision2_col.oncolision("mouse_box")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
-                
-                rec_phys.addforce(vector2D(1,-1));
 
-                colision2.x = rec_phys.getpos().getx();
-                colision2.y = rec_phys.getpos().gety();
 
             
                 
@@ -169,9 +166,9 @@ int main(int argc, char* argv[]) {
 
             mouse_rect.x = mx - (mouse_rect.w/2);
             mouse_rect.y = my - (mouse_rect.h / 2);
-
             //mouse_box.setx(mx);
             //mouse_box.sety(my);*/
+            int new_r;
             while (SDL_PollEvent(&e)){
                 if (e.type == SDL_QUIT) { 
                     quit = true; 
@@ -203,6 +200,7 @@ int main(int argc, char* argv[]) {
                             
                                 bolita.sety(bolita.getcentery() + 1);
                             }
+                            
                             seleciono->move(TOP_RIGHT, 0, 1);
                             seleciono->move(TOP_LEFT, 0, 1);
                             seleciono->move(BOTTOM_LEFT, 0, 1);
@@ -213,10 +211,21 @@ int main(int argc, char* argv[]) {
                             if (seleciono->point_hit(bolita.getcenterx(), bolita.getcentery())) {
                                 bolita.sety(bolita.getcentery() - 1);
                             }
+                            
                             seleciono->move(TOP_RIGHT, 0, -1);
                             seleciono->move(TOP_LEFT, 0, -1);
                             seleciono->move(BOTTOM_LEFT, 0, -1);
                             seleciono->move(BOTTOM_RIGHT, 0, -1);
+                            break;
+                        case SDLK_y:
+                            new_r = mouse_box.getradious();
+                            mouse_box.setradious(new_r +=5);
+                           
+                            break;
+                        case SDLK_h:
+                            new_r = mouse_box.getradious();
+                            mouse_box.setradious(new_r -=5);
+                           
                             break;
                         default:
                             break;
