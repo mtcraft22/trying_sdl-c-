@@ -19,7 +19,7 @@ using namespace std;
 
 int mx, my;
 
-double torad(int angle){return (angle*180)*3.1416;}
+double torad(int angle){return ((double)angle/180)*3.1416;}
 int main(int argc, char* argv[]) {
     if (!init_sdl()) {
         cout << SDL_GetError();
@@ -220,12 +220,12 @@ int main(int argc, char* argv[]) {
                         case SDLK_y:
                             new_r = mouse_box.getradious();
                             mouse_box.setradious(new_r +=5);
-                           
+                            mouse_box.DrawCircle(renderizador);
                             break;
                         case SDLK_h:
                             new_r = mouse_box.getradious();
                             mouse_box.setradious(new_r -=5);
-                           
+                            mouse_box.DrawCircle(renderizador);
                             break;
                         default:
                             break;
