@@ -50,9 +50,9 @@ int main(int argc, char* argv[]) {
     if (!tex) { cout << "sdl_texture_load" << SDL_GetError() << std::endl; }
 
     SDL_Color col{ 0xff,0xff,0xff,0xff };
-
-    Chunck* trozo = new Chunck(40,10,10, 300,100,&col);
-   
+    SDL_Color col2{ 0xff,0xff,0xff,0xff };
+    Chunck* trozo = new Chunck(40,40,40, 300,100,&col);
+    Chunck* mar = new Chunck(40, 40, 40, 300, 100, &col2);
     
     SDL_Vertex vertical_grid[4] = {
         {300,100,col,0.0f,0.0f},
@@ -132,8 +132,11 @@ int main(int argc, char* argv[]) {
         
         if (delta>sdl_ticks_4_frame){
             end = start;
+            SDL_SetRenderDrawColor(renderizador, 55, 55,55, 255);
             SDL_RenderClear(renderizador);
             SDL_SetRenderDrawColor(renderizador, r,g,b,a);
+
+            SDL_SetRenderDrawBlendMode(renderizador, SDL_BLENDMODE_ADD);
             if (colision2_col.oncolision("mouse_box")){
                 SDL_SetRenderDrawColor(renderizador, 255, 0, 0,255);
 
@@ -148,7 +151,8 @@ int main(int argc, char* argv[]) {
             }
             SDL_RenderDrawRect(renderizador, &colision2);
             bolita.DrawCircle(renderizador);
-            trozo->draw_chunk(renderizador, tex);
+           
+            
             bolita.setradious(25);
             
             mouse_box.DrawCircle(renderizador);
@@ -161,6 +165,9 @@ int main(int argc, char* argv[]) {
               //  Circle bolita2 = Circle(bolita.getcenterx(),bolita.getcentery(),i);
                 //bolita2.DrawCircle(renderizador);
             //}
+            mar->draw_chunk(renderizador, awita);
+            trozo->draw_chunk(renderizador, tex);
+            
             SDL_RenderPresent(renderizador);
             SDL_SetRenderDrawColor(renderizador,0,0,0,255);
 
@@ -260,8 +267,35 @@ int main(int argc, char* argv[]) {
                 mx = e.motion.x;
                 my = e.motion.y;
             }
-            for (vector<terreno *> i: trozo->gridgroup ){
-                for (terreno *ter: i){
+           
+            for (int i = 0; i < trozo->gridgroup.size(); i++) {
+                for (int j = 0; j < trozo->gridgroup.at(i).size(); j++) {
+                    terreno* ter = trozo->gridgroup.at(i).at(j);
+                    terreno* ter2 = mar->gridgroup.at(i).at(j);
+                    ter->poligono1[0].color = col;
+                    ter->poligono1[1].color = col;
+                    ter->poligono1[2].color = col;
+                    ter->poligono2[0].color = col;
+                    ter->poligono2[1].color = col;
+                    ter->poligono2[2].color = col;
+                    if (ter->poligono1[0].position.y > ter2->poligono1[0].position.y) {
+                        ter->poligono1[0].color = SDL_Color{ 0,0,0,0 };
+                    }
+                    if (ter->poligono1[1].position.y > ter2->poligono1[1].position.y) {
+                        ter->poligono1[1].color = SDL_Color{ 0,0,0,0 };
+                    }
+                    if (ter->poligono1[2].position.y > ter2->poligono1[2].position.y) {
+                        ter->poligono1[2].color = SDL_Color{ 0,0,0,0 };
+                    }
+                    if (ter->poligono2[0].position.y > ter2->poligono2[0].position.y) {
+                        ter->poligono2[0].color = SDL_Color{ 0,0,0,0 };
+                    }
+                    if (ter->poligono2[1].position.y > ter2->poligono2[1].position.y) {
+                        ter->poligono2[1].color = SDL_Color{ 0,0,0,0 };
+                    }
+                    if (ter->poligono2[2].position.y > ter2->poligono2[2].position.y) {
+                        ter->poligono2[2].color = SDL_Color{ 0,0,0,0 };
+                    }
                     if (ter->point_hit(mx, my)) {
                         ter->poligono1[0].color = SDL_Color{ 0,100,0,255 };
                         ter->poligono1[1].color = SDL_Color{ 0,100,0,255 };
@@ -291,25 +325,20 @@ int main(int argc, char* argv[]) {
                         bolita.sety(bolita.getcentery() + 4);
                     }
                     }
-                    else 
-                    {
-                        ter->poligono1[0].color = col;
-                        ter->poligono1[1].color = col;
-                        ter->poligono1[2].color = col;
-                        ter->poligono2[0].color = col;
-                        ter->poligono2[1].color = col;
-                        ter->poligono2[2].color = col;
-                    }
+                    
+
                 
                 }
 
             }
+            
         }else{
             SDL_Delay(floor(sdl_ticks_4_frame-delta));
         }
     }
-    
+    delete mar;
     delete trozo;
+
     SDL_DestroyTexture(tex);
     SDL_DestroyTexture(pepe_text);
     
