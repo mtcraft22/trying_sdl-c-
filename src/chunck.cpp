@@ -1,4 +1,3 @@
-#include "SDL_pixels.h"
 #include <SDL.h>
 #include <chunck.hpp>
 #include <grid.hpp>
